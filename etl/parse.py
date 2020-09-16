@@ -8,7 +8,6 @@ html_parser = HTMLParser()
 
 def parse_status(status):
     status_id = status.id_str
-    #print status_id
     retweet_user = None
     created_at = \
         datetime.strptime(status.created_at, '%a %b %d %H:%M:%S +0000 %Y').strftime('%Y-%m-%d %H:%M:%S')
@@ -27,6 +26,8 @@ def parse_status(status):
     media_url, parsed_txt = get_twitter_media_url(status, parsed_txt)
     if ext_url and not media_url:
         media_url, parsed_txt = get_ext_media_url(ext_url, parsed_txt)
+    if media_url and '.mp4' not in media_url:
+        return None
 
     if status.retweeted_status:
         retweet_user = status.retweeted_status.user
@@ -77,6 +78,7 @@ def parse_status(status):
 
 
 def get_ext_media_url(ext_url, txt):
+    print ext_url
     url = None
     response = requests.get(ext_url)
     if response.status_code == 200:
