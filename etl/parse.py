@@ -73,7 +73,7 @@ def parse_status(status):
         ('$' in parsed_txt or '%' in parsed_txt):
         return tweet_dict
     else:
-        return None
+        return tweet_dict
     '''elif retweet_user and ext_url and media_url:
         return tweet_dict
     elif not retweet_user:
@@ -107,7 +107,7 @@ def get_twitter_media_url(stat, txt):
         if stat.media[0].video_info is not None:
             variants = [v for v in stat.media[0].video_info['variants'] if v['content_type'] == 'video/mp4']
             variants = sorted(variants, key=lambda x: int(x['bitrate']), reverse=True)
-            url = None if len(variants) == 0 else variants[0] if len(variants) == 1 else variants[1]
+            url = None if len(variants) == 0 else variants[0]['url'] if len(variants) == 1 else variants[1]['url']
         for m in stat.media:
             txt = txt.replace(m.url, m.display_url)
     return url, txt
