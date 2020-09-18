@@ -3,10 +3,12 @@ from HTMLParser import HTMLParser
 from bs4 import BeautifulSoup
 import requests
 
+
 html_parser = HTMLParser()
 
 
 def parse_status(status):
+    print status.user.screen_name
     status_id = status.id_str
     retweet_user = None
     created_at = \
@@ -26,8 +28,6 @@ def parse_status(status):
     media_url, parsed_txt = get_twitter_media_url(status, parsed_txt)
     if ext_url and not media_url:
         media_url, parsed_txt = get_ext_media_url(ext_url, parsed_txt)
-    if media_url and '.mp4' not in media_url:
-        return None
 
     if status.retweeted_status:
         retweet_user = status.retweeted_status.user
@@ -63,24 +63,30 @@ def parse_status(status):
     }
     whitelist = \
         ['TeamTrump', 'TrumpWarRoom', 'Mike_Pence', 'GOP', 'IvankaTrump', 'DonaldJTrumpJr', 'EricTrump']
-    if retweet_user and (retweet_user.screen_name in whitelist or
+    '''if retweet_user and (retweet_user.screen_name in whitelist or
                          'rep' in retweet_user.screen_name.lower() or
                          'sen' in retweet_user.screen_name.lower()):
         return tweet_dict
     elif retweet_user and media_url and retweet_user.verified:
-        return tweet_dict
-    elif retweet_user and ext_url and media_url:
-        return tweet_dict
-    elif not retweet_user:
+        return tweet_dict'''
+    if status.user.screen_name == 'CNBC' and \
+        ('$' in parsed_txt or '%' in parsed_txt):
         return tweet_dict
     else:
         return None
+    '''elif retweet_user and ext_url and media_url:
+        return tweet_dict
+    elif not retweet_user:
+        return tweet_dict'''
 
 
 def get_ext_media_url(ext_url, txt):
-    print ext_url
     url = None
-    response = requests.get(ext_url)
+    try:
+        response = requests.get(ext_url)
+    except requests.exceptions.SSLError, e:
+        return None, txt
+
     if response.status_code == 200:
         soup = BeautifulSoup(response.text, "html.parser")
         og_image = soup.find("meta", property="og:image")
@@ -101,8 +107,7 @@ def get_twitter_media_url(stat, txt):
         if stat.media[0].video_info is not None:
             variants = [v for v in stat.media[0].video_info['variants'] if v['content_type'] == 'video/mp4']
             variants = sorted(variants, key=lambda x: int(x['bitrate']), reverse=True)
-            if len(variants) > 0:
-                url = variants[0]['url']
+            url = None if len(variants) == 0 else variants[0] if len(variants) == 1 else variants[1]
         for m in stat.media:
             txt = txt.replace(m.url, m.display_url)
     return url, txt
