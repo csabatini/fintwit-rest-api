@@ -5,10 +5,10 @@ import requests
 
 
 html_parser = HTMLParser()
+MAX_NEWLINES = 5
 
 
 def parse_status(status):
-    print status.user.screen_name
     status_id = status.id_str
     retweet_user = None
     created_at = \
@@ -17,6 +17,9 @@ def parse_status(status):
         int((datetime.strptime(status.created_at, '%a %b %d %H:%M:%S +0000 %Y') - datetime(1970, 1, 1)).total_seconds())
     parsed_txt = \
         html_parser.unescape(status.retweeted_status.full_text if status.retweeted_status else status.full_text)
+    if parsed_txt.count('\n') > MAX_NEWLINES:
+        parsed_txt = parsed_txt.replace('\n', ' ')
+        print parsed_txt
     ext_url = None
     for u in status.urls:
         unquoted_url = requests.utils.unquote(u.expanded_url)
@@ -35,8 +38,11 @@ def parse_status(status):
         parsed_txt = 'RT @' + retweet_user.screen_name + ': ' + parsed_txt
     elif status.quoted_status:
         user = status.quoted_status.user.screen_name
+        quote = html_parser.unescape(status.quoted_status.full_text)
+        if quote.count('\n') > MAX_NEWLINES:
+            quote = quote.replace('\n', '')
         parsed_txt = \
-            parsed_txt + "\n\n" + "@" + user + ": \"" + html_parser.unescape(status.quoted_status.full_text) + "\""
+            parsed_txt + "\n\n" + "@" + user + ": \"" + quote + "\""
         status = status.quoted_status
 
     for u in status.urls:  # repeat url process with the retweeted/quoted url
@@ -69,6 +75,8 @@ def parse_status(status):
         return tweet_dict
     elif retweet_user and media_url and retweet_user.verified:
         return tweet_dict'''
+    newline_count = parsed_txt.count('\n')
+    #print 'newline count: {}'.format(newline_count)
     if status.user.screen_name == 'CNBC' and \
         ('$' in parsed_txt or '%' in parsed_txt):
         return tweet_dict
