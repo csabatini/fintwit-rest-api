@@ -90,15 +90,20 @@ def parse_status(status):
 
 def get_ext_media_url(ext_url, txt):
     url = None
+    headers = {'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/50.0.2661.102 Safari/537.36'}
     try:
-        response = requests.get(ext_url)
-    except requests.exceptions.SSLError, e:
+        response = requests.get(ext_url, headers=headers)
+    except Exception as e:
         return None, txt
 
     if response.status_code == 200:
         soup = BeautifulSoup(response.text, "html.parser")
+        twitter_player = soup.find("meta", property="twitter:player")
         og_image = soup.find("meta", property="og:image")
-        if og_image:
+
+        if twitter_player:
+            url = requests.utils.unquote(twitter_player["content"].strip())
+        elif og_image:
             url = requests.utils.unquote(og_image["content"].strip())
         og_title = soup.find("meta", property="og:title")
         if og_title:
