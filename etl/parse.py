@@ -19,7 +19,6 @@ def parse_status(status):
         html_parser.unescape(status.retweeted_status.full_text if status.retweeted_status else status.full_text)
     if parsed_txt.count('\n') > MAX_NEWLINES:
         parsed_txt = parsed_txt.replace('\n', ' ')
-        print parsed_txt
     ext_url = None
     for u in status.urls:
         unquoted_url = requests.utils.unquote(u.expanded_url)
@@ -29,8 +28,8 @@ def parse_status(status):
 
     # get the media from the original tweet
     media_url, parsed_txt = get_twitter_media_url(status, parsed_txt)
-    if ext_url and not media_url:
-        media_url, parsed_txt = get_ext_media_url(ext_url, parsed_txt)
+    if ext_url and (not media_url or (media_url and 'video' not in media_url)):
+        media_url, parsed_txt = get_ext_media_url(ext_url, media_url, parsed_txt)
 
     if status.retweeted_status:
         retweet_user = status.retweeted_status.user
@@ -56,8 +55,8 @@ def parse_status(status):
         tmp_media, parsed_txt = get_twitter_media_url(status, parsed_txt)
         if tmp_media:
             media_url = tmp_media
-        if ext_url and not tmp_media:
-            tmp_media, parsed_txt = get_ext_media_url(ext_url, parsed_txt)
+        elif ext_url:
+            tmp_media, parsed_txt = get_ext_media_url(ext_url, media_url, parsed_txt)
             if tmp_media:
                 media_url = tmp_media
     tweet_dict = {
@@ -76,7 +75,6 @@ def parse_status(status):
     elif retweet_user and media_url and retweet_user.verified:
         return tweet_dict'''
     newline_count = parsed_txt.count('\n')
-    #print 'newline count: {}'.format(newline_count)
     if status.user.screen_name == 'CNBC' and \
         ('$' in parsed_txt or '%' in parsed_txt):
         return tweet_dict
@@ -88,8 +86,8 @@ def parse_status(status):
         return tweet_dict'''
 
 
-def get_ext_media_url(ext_url, txt):
-    url = None
+def get_ext_media_url(ext_url, media_url, txt):
+    url = media_url
     headers = {'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/50.0.2661.102 Safari/537.36'}
     try:
         response = requests.get(ext_url, headers=headers)
@@ -98,8 +96,8 @@ def get_ext_media_url(ext_url, txt):
 
     if response.status_code == 200:
         soup = BeautifulSoup(response.text, "html.parser")
-        twitter_player = soup.find("meta", property="twitter:player")
-        og_image = soup.find("meta", property="og:image")
+        twitter_player = soup.find('meta', attrs={'name': 'twitter:player'})
+        og_image = soup.find('meta', attrs={'property': 'og:image'})
 
         if twitter_player:
             url = requests.utils.unquote(twitter_player["content"].strip())
