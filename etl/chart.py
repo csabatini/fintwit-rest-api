@@ -4,9 +4,12 @@ import json
 import math
 from datetime import datetime
 
+def round_num(number):
+    return round(number * 2) / 2
+
 def login():
     login = robin_stocks.login(os.environ['RH_USER'], os.environ['RH_PW'])
-    data = robin_stocks.stocks.get_stock_historicals("GAN", span='month', bounds='regular')
+    data = robin_stocks.stocks.get_stock_historicals("GAN", span='day', bounds='regular')
     summary = {}
     summary['first'] = round(float(data[0]['close_price']), 2)
     summary['last'] = round(float(data[-1]['close_price']), 2)
@@ -41,13 +44,15 @@ def login():
     high = summary['high']
     chl[low[0]] = str(round(low[1], 2))
     chl[high[0]] = str(round(high[1], 2))
+    print(low)
+    print(high)
     if low[0] > 4:
         chl[2] = str(summary['first'])
     chl[-1] = str(summary['last'])
 
     # axis bounds
-    lower_bound = (math.floor(summary['low'][1] * 0.95))
-    upper_bound = (math.floor(summary['high'][1] * 1.05))
+    lower_bound = round_num(summary['low'][1])
+    upper_bound = round_num(summary['high'][1])
 
     chart_url = "https://image-charts.com/chart?cht=lc&chxt=x,y&chxl=0:|{}&chd=a:{}&chl={}&chco=76A4FB&chls=2.5&chs=720x240&chxr=1,{},{}&chlps=offset,5|align,left".\
         format('|'.join(xl), ','.join(chd), '|'.join(chl), lower_bound, upper_bound)
