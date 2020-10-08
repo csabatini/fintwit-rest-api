@@ -6,9 +6,7 @@ from datetime import datetime
 
 def login():
     login = robin_stocks.login(os.environ['RH_USER'], os.environ['RH_PW'])
-    # deposits = sum(float(x['amount']) for x in robin_stocks.get_bank_transfers()
-        # if (x['direction'] == 'deposit') and (x['state'] == 'completed'))
-    data = robin_stocks.stocks.get_stock_historicals("GAN", span='week', bounds='regular')
+    data = robin_stocks.stocks.get_stock_historicals("GAN", span='month', bounds='regular')
     summary = {}
     summary['first'] = round(float(data[0]['close_price']), 2)
     summary['last'] = round(float(data[-1]['close_price']), 2)
@@ -51,7 +49,7 @@ def login():
     lower_bound = (math.floor(summary['low'][1] * 0.95))
     upper_bound = (math.floor(summary['high'][1] * 1.05))
 
-    chart_url = "https://image-charts.com/chart?cht=lc&chxt=x,y&chxl=0:|{}&chd=a:{}&chl={}&chco=76A4FB&chls=2.5&chs=480x240&chxr=1,{},{}&chlps=offset,5|align,left".\
+    chart_url = "https://image-charts.com/chart?cht=lc&chxt=x,y&chxl=0:|{}&chd=a:{}&chl={}&chco=76A4FB&chls=2.5&chs=720x240&chxr=1,{},{}&chlps=offset,5|align,left".\
         format('|'.join(xl), ','.join(chd), '|'.join(chl), lower_bound, upper_bound)
     print(chart_url)
 
