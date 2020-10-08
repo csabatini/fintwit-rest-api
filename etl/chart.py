@@ -38,8 +38,12 @@ def login():
 
     # print(json.dumps(summary))
     # print(data)
+    lower_bound = summary['low'][1]
+    upper_bound = summary['high'][1]
     print('|'.join(xl))
     print(','.join(chd))
+    print(lower_bound)
+    print(upper_bound)
 
     chart_url = "https://image-charts.com/chart?cht=lc&chxt=x,y&chxl=0:|10/1||||||10/2||||||10/5||||||10/6||||||10/7||||&chd=a:16.330000,16.390000,16.170000,16.240000,16.135000,15.970000,16.190000,15.980000,16.070000,16.005000,16.125000,16.200000,18.650000,18.115000,18.390000,18.435000,18.410000,18.200000,18.150000,18.000000,18.150000,18.190000,17.980000,17.580000,17.730000,17.608400,17.650000,17.630000&chl=||16.33||||||||||18.65|||||||||||||||17.68&chco=76A4FB&chls=2.0&chs=480x240&chxr=1,15,20&chlps=offset,5|align,left"
 
