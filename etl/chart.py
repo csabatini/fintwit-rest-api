@@ -53,10 +53,10 @@ def login():
         chl[-1] = str(summary['last'])
 
     # axis bounds
-    lower_bound = round_num(summary['low'][1])
-    upper_bound = round_num(summary['high'][1])
+    lower_bound = math.floor(summary['low'][1])
+    upper_bound = math.ceil(summary['high'][1])
 
-    chart_url = "https://image-charts.com/chart?cht=lc&chxt=x,y&chxl=0:|{}&chd=a:{}&chl={}&chco=76A4FB&chls=2.5&chs=720x240&chxr=1,{},{}&chlps=offset,5|align,left".\
+    chart_url = "https://image-charts.com/chart?cht=lc&chxt=x,y&chxl=0:|{}&chd=a:{}&chl={}&chco=76A4FB&chls=2.5&chs=720x240&chxr=1,{},{}&chlps=offset,5|align,left|clip,true".\
         format('|'.join(xl), ','.join(chd), '|'.join(chl), lower_bound, upper_bound)
     print(chart_url)
 
