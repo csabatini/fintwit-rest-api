@@ -9,7 +9,7 @@ def round_num(number):
 
 def login():
     login = robin_stocks.login(os.environ['RH_USER'], os.environ['RH_PW'])
-    data = robin_stocks.stocks.get_stock_historicals("MSFT", span='week', bounds='regular')
+    data = robin_stocks.stocks.get_stock_historicals("NCLH", span='week', bounds='regular')
     summary = {}
     summary['first'] = round(float(data[0]['close_price']), 2)
     summary['last'] = round(float(data[-1]['close_price']), 2)
@@ -23,8 +23,8 @@ def login():
 
     for i, kv in enumerate(data):
         begins_at = kv['begins_at']
-        low = float(kv['low_price'])
-        high = float(kv['high_price'])
+        low = round(float(kv['low_price']), 2)
+        high = round(float(kv['high_price']), 2)
         if low < summary['low'][1]:
             summary['low'] = (i, low)
         if high > summary['high'][1]:
@@ -43,7 +43,8 @@ def login():
     low = summary['low']
     high = summary['high']
     chl[low[0]] = 'low: {}'.format(round(low[1], 2))
-    chl[high[0]] = 'high: {}'.format(round(high[1], 2))
+    pct_chg =  round(round(high[1]/summary['first']*100, 2)-100.0, 2)
+    chl[high[0]] = 'high: {}\\n{}%'.format(high[1], pct_chg)
     print(low)
     print(high)
     if low[0] > 4 and high[0] > 4:
