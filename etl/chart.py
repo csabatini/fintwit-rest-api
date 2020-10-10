@@ -9,7 +9,7 @@ def round_num(number):
 
 def login():
     login = robin_stocks.login(os.environ['RH_USER'], os.environ['RH_PW'])
-    data = robin_stocks.stocks.get_stock_historicals("GAN", span='day', bounds='regular')
+    data = robin_stocks.stocks.get_stock_historicals("MSFT", span='week', bounds='regular')
     summary = {}
     summary['first'] = round(float(data[0]['close_price']), 2)
     summary['last'] = round(float(data[-1]['close_price']), 2)
@@ -42,13 +42,14 @@ def login():
     # data point labels 
     low = summary['low']
     high = summary['high']
-    chl[low[0]] = str(round(low[1], 2))
-    chl[high[0]] = str(round(high[1], 2))
+    chl[low[0]] = 'low: {}'.format(round(low[1], 2))
+    chl[high[0]] = 'high: {}'.format(round(high[1], 2))
     print(low)
     print(high)
-    if low[0] > 4:
+    if low[0] > 4 and high[0] > 4:
         chl[2] = str(summary['first'])
-    chl[-1] = str(summary['last'])
+    if low[0] < len(chl)-4 and high[0] < len(chl)-4:
+        chl[-1] = str(summary['last'])
 
     # axis bounds
     lower_bound = round_num(summary['low'][1])
