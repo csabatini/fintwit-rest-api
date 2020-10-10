@@ -44,20 +44,19 @@ def login():
     high = summary['high']
     chl[low[0]] = 'low: {}'.format(round(low[1], 2))
     pct_chg =  round(round(high[1]/summary['first']*100, 2)-100.0, 2)
-    chl[high[0]] = 'high: {}\\n{}%'.format(high[1], pct_chg)
-    print(low)
-    print(high)
-    if low[0] > 4 and high[0] > 4:
+    chl[high[0]] = 'high: {} ({}%)'.format(high[1], pct_chg)
+    if low[0] > 3 and high[0] > 3:
         chl[2] = str(summary['first'])
-    if low[0] < len(chl)-4 and high[0] < len(chl)-4:
+    if low[0] < len(chl)-3 and high[0] < len(chl)-3:
         chl[-1] = str(summary['last'])
+    print('high_i: {}, last_i: {}'.format(high[0], len(chl)))
 
     # axis bounds
     lower_bound = math.floor(summary['low'][1])
     upper_bound = math.ceil(summary['high'][1])
 
-    chart_url = "https://image-charts.com/chart?cht=lc&chxt=x,y&chxl=0:|{}&chd=a:{}&chl={}&chco=76A4FB&chls=2.5&chs=720x240&chxr=1,{},{}&chlps=offset,5|align,left|clip,true".\
-        format('|'.join(xl), ','.join(chd), '|'.join(chl), lower_bound, upper_bound)
+    chart_url = "https://image-charts.com/chart?cht=lc&chxt=x,y&chxl=0:|{}&chd=a:{}&chl={}&chco=76A4FB&chls=2.5&chs=720x240&chxr=1,{},{}&chlps=offset,5|align,left|clip,false&chma=0,15,15,0"\
+        .format('|'.join(xl), ','.join(chd), '|'.join(chl), lower_bound, upper_bound)
     print(chart_url)
 
 if __name__ == '__main__':
