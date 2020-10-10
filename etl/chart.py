@@ -9,7 +9,7 @@ def round_num(number):
 
 def login():
     login = robin_stocks.login(os.environ['RH_USER'], os.environ['RH_PW'])
-    data = robin_stocks.stocks.get_stock_historicals("NCLH", span='week', bounds='regular')
+    data = robin_stocks.stocks.get_stock_historicals("GAN", span='week', bounds='regular')
     summary = {}
     summary['first'] = round(float(data[0]['close_price']), 2)
     summary['last'] = round(float(data[-1]['close_price']), 2)
@@ -23,12 +23,12 @@ def login():
 
     for i, kv in enumerate(data):
         begins_at = kv['begins_at']
-        low = round(float(kv['low_price']), 2)
-        high = round(float(kv['high_price']), 2)
-        if low < summary['low'][1]:
-            summary['low'] = (i, low)
-        if high > summary['high'][1]:
-            summary['high'] = (i, high)
+        close_price = round(float(kv['close_price']), 2)
+        # high = round(float(kv['high_price']), 2)
+        if close_price < summary['low'][1]:
+            summary['low'] = (i, close_price)
+        if close_price > summary['high'][1]:
+            summary['high'] = (i, close_price)
 
         # axis label
         date = datetime.strptime(begins_at, '%Y-%m-%dT%H:%M:%SZ')
