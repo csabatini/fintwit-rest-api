@@ -81,12 +81,10 @@ def get_ext_media_url(ext_url, media_urls):
     urls = media_urls 
     headers = {'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/50.0.2661.102 Safari/537.36'}
     try:
-        print 'Requesting {}'.format(ext_url)
-        response = requests.get(ext_url, headers=headers)
+        response = requests.get(ext_url, headers=headers, timeout=15)
     except Exception as e:
-        return None, txt
+        return None
 
-    print response.status_code
     if response.status_code == 200:
         soup = BeautifulSoup(response.text, "html.parser")
         twitter_player = soup.find('meta', attrs={'name': 'twitter:player'})
