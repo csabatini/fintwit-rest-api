@@ -70,17 +70,11 @@ def parse_status(status):
         'quote_text': parsed_quote_txt,
         'media_urls': media_urls
     }
-    # newline_count = parsed_txt.count('\n')
-    # if status.user.screen_name == 'CNBC' and \
-    #     ('$' in parsed_txt or '%' in parsed_txt):
-    #     return tweet_dict
-    # else:
-    return tweet_dict
-    '''elif retweet_user and ext_url and media_url:
-        return tweet_dict
-    elif not retweet_user:
-        return tweet_dict'''
 
+    if status.user.screen_name == 'CNBC' and not re.findall("[0-9]+.[0-9]+%", parsed_txt):
+        return None
+    else:
+        return tweet_dict
 
 def get_ext_media_url(ext_url, media_urls):
     urls = media_urls 
