@@ -5,18 +5,19 @@ import requests
 
 
 html_parser = HTMLParser()
-MAX_NEWLINES = 5
+MAX_NEWLINES = 11
 
 
 def parse_status(status):
-    status_id = status.id_str
-    retweet_user = None
+    status_id = status.id
     created_at = \
         datetime.strptime(status.created_at, '%a %b %d %H:%M:%S +0000 %Y').strftime('%Y-%m-%d %H:%M:%S')
     unixtime = \
         int((datetime.strptime(status.created_at, '%a %b %d %H:%M:%S +0000 %Y') - datetime(1970, 1, 1)).total_seconds())
     parsed_txt = \
         html_parser.unescape(status.retweeted_status.full_text if status.retweeted_status else status.full_text)
+    parsed_quote_txt = \
+        html_parser.unescape(status.quoted_status.full_text if status.quoted_status else None
     if parsed_txt.count('\n') > MAX_NEWLINES:
         parsed_txt = parsed_txt.replace('\n', ' ')
     ext_url = None
