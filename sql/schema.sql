@@ -114,6 +114,8 @@ CREATE VIEW status_author AS
     ON s.author_id = a.author_id 
 );
 
+-- CREATE TABLE status_media
+
 CREATE TABLE tag (
     tag_id int NOT NULL AUTO_INCREMENT,
     tag varchar(25) NOT NULL,
