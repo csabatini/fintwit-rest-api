@@ -58,7 +58,7 @@ def parse_status(status):
         if tmp_media:
             media_urls = tmp_media
         elif ext_url:
-            tmp_media, parsed_txt = get_ext_media_url(ext_url, media_url, parsed_txt)
+            tmp_media, parsed_txt = get_ext_media_url(ext_url, media_urls, parsed_txt)
             if tmp_media:
                 media_urls = tmp_media
     tweet_dict = {
