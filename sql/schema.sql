@@ -86,9 +86,11 @@ CREATE TABLE status_word (
 ) DEFAULT CHARSET=utf8;
 
 CREATE TABLE status (
-    status_id varchar(36) NOT NULL,
-    author_id int NOT NULL,
+    status_id bigint NOT NULL,
+    author_id bigint NOT NULL,
     text varchar(1000) NOT NULL,
+    quote_author_id bigint NULL,
+    quote_text varchar(1000) NULL,
     media_url varchar(500) NULL,
     created_at timestamp NOT NULL,
     PRIMARY KEY (status_id),
@@ -98,7 +100,7 @@ CREATE TABLE status (
 -- ALTER TABLE status MODIFY COLUMN media_url varchar(500) NULL;
 
 CREATE TABLE author (
-    author_id int NOT NULL,
+    author_id bigint NOT NULL,
     screen_name varchar(100) NOT NULL,
     name varchar(255) NOT NULL,
     profile_img_url varchar(500) NULL,
