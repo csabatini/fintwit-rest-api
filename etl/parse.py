@@ -41,7 +41,7 @@ def parse_status(status):
     # get the media from the original tweet
     media_urls, parsed_txt = get_twitter_media_urls(status, parsed_txt)
     if ext_url and not media_urls:
-        media_urls, parsed_txt = get_ext_media_url(ext_url, media_urls, parsed_txt)
+        media_urls = get_ext_media_url(ext_url, media_urls)
 
     if status.quoted_status:
         status = status.quoted_status
@@ -57,7 +57,7 @@ def parse_status(status):
         if tmp_media:
             media_urls = tmp_media
         elif ext_url:
-            tmp_media, parsed_txt = get_ext_media_url(ext_url, media_urls, parsed_txt)
+            tmp_media = get_ext_media_url(ext_url, media_urls)
             if tmp_media:
                 media_urls = tmp_media
     tweet_dict = {
@@ -82,29 +82,27 @@ def parse_status(status):
         return tweet_dict'''
 
 
-def get_ext_media_url(ext_url, media_urls, txt):
+def get_ext_media_url(ext_url, media_urls):
     urls = media_urls 
     headers = {'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/50.0.2661.102 Safari/537.36'}
     try:
+        print 'Requesting {}'.format(ext_url)
         response = requests.get(ext_url, headers=headers)
     except Exception as e:
         return None, txt
 
+    print response.status_code
     if response.status_code == 200:
         soup = BeautifulSoup(response.text, "html.parser")
         twitter_player = soup.find('meta', attrs={'name': 'twitter:player'})
         og_image = soup.find('meta', attrs={'property': 'og:image'})
+        print og_image
 
         if twitter_player:
             urls = [requests.utils.unquote(twitter_player["content"].strip())]
         elif og_image:
             urls = [requests.utils.unquote(og_image["content"].strip())]
-        og_title = soup.find("meta", property="og:title")
-        if og_title:
-            clean_title = html_parser.unescape(og_title["content"].strip())
-            if clean_title not in txt:
-                txt = txt + "\n\n\"" + clean_title + "\""
-    return urls, txt
+    return urls
 
 def get_twitter_media_urls(stat, txt):
     urls = []
