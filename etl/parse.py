@@ -39,54 +39,49 @@ def parse_status(status):
             ext_url = unquoted_url
 
     # get the media from the original tweet
-    media_url, parsed_txt = get_twitter_media_url(status, parsed_txt)
-    if ext_url and (not media_url or (media_url and 'video' not in media_url)):
-        media_url, parsed_txt = get_ext_media_url(ext_url, media_url, parsed_txt)
+    media_urls, parsed_txt = get_twitter_media_urls(status, parsed_txt)
+    if ext_url and not media_urls or (media_urls and not [u for u in media_urls if 'video' in u]):
+        media_urls, parsed_txt = get_ext_media_url(ext_url, media_urls, parsed_txt)
+
+    if status.quoted_status:
+        status = status.quoted_status
 
     for u in status.urls:  # repeat url process with the retweeted/quoted url
         unquoted_url = requests.utils.unquote(u.expanded_url)
-        parsed_txt = parsed_txt.replace(u.url, unquoted_url)
+        parsed_quote_txt = parsed_quote_txt.replace(u.url, unquoted_url)
         if 'twitter.com' not in unquoted_url and not unquoted_url.endswith(('.pdf', '.jpg', '.mp4')):
             ext_url = unquoted_url
 
     # possibly override the original media with retweet/quote media
-    if status.id_str != status_id:
-        tmp_media, parsed_txt = get_twitter_media_url(status, parsed_txt)
+    if status.id != status_id:
+        tmp_media, parsed_quote_txt = get_twitter_media_urls(status, parsed_quote_txt)
         if tmp_media:
-            media_url = tmp_media
+            media_urls = tmp_media
         elif ext_url:
             tmp_media, parsed_txt = get_ext_media_url(ext_url, media_url, parsed_txt)
             if tmp_media:
-                media_url = tmp_media
+                media_urls = tmp_media
     tweet_dict = {
         'id': status_id,
         'timestamp': created_at,
         'unixtime': unixtime,
         'text': parsed_txt,
-        'media_url': media_url
+        'media_urls': media_urls
     }
-    whitelist = \
-        ['TeamTrump', 'TrumpWarRoom', 'Mike_Pence', 'GOP', 'IvankaTrump', 'DonaldJTrumpJr', 'EricTrump']
-    '''if retweet_user and (retweet_user.screen_name in whitelist or
-                         'rep' in retweet_user.screen_name.lower() or
-                         'sen' in retweet_user.screen_name.lower()):
-        return tweet_dict
-    elif retweet_user and media_url and retweet_user.verified:
-        return tweet_dict'''
-    newline_count = parsed_txt.count('\n')
-    if status.user.screen_name == 'CNBC' and \
-        ('$' in parsed_txt or '%' in parsed_txt):
-        return tweet_dict
-    else:
-        return tweet_dict
+    # newline_count = parsed_txt.count('\n')
+    # if status.user.screen_name == 'CNBC' and \
+    #     ('$' in parsed_txt or '%' in parsed_txt):
+    #     return tweet_dict
+    # else:
+    return tweet_dict
     '''elif retweet_user and ext_url and media_url:
         return tweet_dict
     elif not retweet_user:
         return tweet_dict'''
 
 
-def get_ext_media_url(ext_url, media_url, txt):
-    url = media_url
+def get_ext_media_url(ext_url, media_urls, txt):
+    urls = media_url
     headers = {'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/50.0.2661.102 Safari/537.36'}
     try:
         response = requests.get(ext_url, headers=headers)
@@ -99,25 +94,27 @@ def get_ext_media_url(ext_url, media_url, txt):
         og_image = soup.find('meta', attrs={'property': 'og:image'})
 
         if twitter_player:
-            url = requests.utils.unquote(twitter_player["content"].strip())
+            urls = [requests.utils.unquote(twitter_player["content"].strip())]
         elif og_image:
-            url = requests.utils.unquote(og_image["content"].strip())
+            urls = [requests.utils.unquote(og_image["content"].strip())]
         og_title = soup.find("meta", property="og:title")
         if og_title:
             clean_title = html_parser.unescape(og_title["content"].strip())
             if clean_title not in txt:
                 txt = txt + "\n\n\"" + clean_title + "\""
-    return url, txt
+    return urls, txt
 
-
-def get_twitter_media_url(stat, txt):
-    url = None
+def get_twitter_media_urls(stat, txt):
+    urls = []
     if stat.media is not None and len(stat.media) > 0:
-        url = stat.media[0].media_url_https
-        if stat.media[0].video_info is not None:
-            variants = [v for v in stat.media[0].video_info['variants'] if v['content_type'] == 'video/mp4']
-            variants = sorted(variants, key=lambda x: int(x['bitrate']), reverse=True)
-            url = None if len(variants) == 0 else variants[0]['url'] if len(variants) == 1 else variants[1]['url']
-        for m in stat.media:
-            txt = txt.replace(m.url, m.display_url)
-    return url, txt
+        for u in stat.media:
+            url = u.media_url_https
+            for m in stat.media:
+                txt = txt.replace(m.url, m.display_url)
+            if u.video_info is not None:
+                variants = [v for v in stat.media[0].video_info['variants'] if v['content_type'] == 'video/mp4']
+                variants = sorted(variants, key=lambda x: int(x['bitrate']), reverse=True)
+                url = None if len(variants) == 0 else variants[0]['url'] if len(variants) == 1 else variants[1]['url']
+                return [url], txt
+            urls.append(url)
+    return urls, txt
