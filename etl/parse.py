@@ -26,6 +26,12 @@ def parse_status(status):
         parsed_quote_txt = parsed_quote_txt.replace('\n', ' ')
 
     ext_url = None
+    if status.quoted_status:
+        for u in status.quoted_status.urls:
+            unquoted_url = requests.utils.unquote(u.expanded_url)
+            parsed_quote_txt = parsed_quote_txt.replace(u.url, unquoted_url)
+            if 'twitter.com' not in unquoted_url and not unquoted_url.endswith(('.pdf', '.jpg', '.mp4')):
+                ext_url = unquoted_url
     for u in status.urls:
         unquoted_url = requests.utils.unquote(u.expanded_url)
         parsed_txt = parsed_txt.replace(u.url, unquoted_url)
