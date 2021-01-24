@@ -45,12 +45,11 @@ def parse_status(status):
 
     if status.quoted_status:
         status = status.quoted_status
-
-    for u in status.urls:  # repeat url process with the retweeted/quoted url
-        unquoted_url = requests.utils.unquote(u.expanded_url)
-        parsed_quote_txt = parsed_quote_txt.replace(u.url, unquoted_url)
-        if 'twitter.com' not in unquoted_url and not unquoted_url.endswith(('.pdf', '.jpg', '.mp4')):
-            ext_url = unquoted_url
+        for u in status.urls:  # repeat url process with the retweeted/quoted url
+            unquoted_url = requests.utils.unquote(u.expanded_url)
+            parsed_quote_txt = parsed_quote_txt.replace(u.url, unquoted_url)
+            if 'twitter.com' not in unquoted_url and not unquoted_url.endswith(('.pdf', '.jpg', '.mp4')):
+                ext_url = unquoted_url
 
     # possibly override the original media with retweet/quote media
     if status.id != status_id:
