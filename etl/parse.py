@@ -63,9 +63,11 @@ def parse_status(status):
     tweet_dict = {
         'id': status_id,
         'author_id': author_id,
+        'quote_author_id': quote_author_id,
         'timestamp': created_at,
         'unixtime': unixtime,
         'text': parsed_txt,
+        'quote_text': parsed_quote_txt,
         'media_urls': media_urls
     }
     # newline_count = parsed_txt.count('\n')
