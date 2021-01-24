@@ -63,6 +63,7 @@ def parse_status(status):
                 media_urls = tmp_media
     tweet_dict = {
         'id': status_id,
+        'author_id': author_id,
         'timestamp': created_at,
         'unixtime': unixtime,
         'text': parsed_txt,
