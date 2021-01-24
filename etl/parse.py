@@ -95,11 +95,13 @@ def get_ext_media_url(ext_url, media_urls):
     if response.status_code == 200:
         soup = BeautifulSoup(response.text, "html.parser")
         twitter_player = soup.find('meta', attrs={'name': 'twitter:player'})
+        twitter_image = soup.find('meta', attrs={'name': 'twitter:image'})
         og_image = soup.find('meta', attrs={'property': 'og:image'})
-        print og_image
 
         if twitter_player:
             urls = [requests.utils.unquote(twitter_player["content"].strip())]
+        elif twitter_image:
+            urls = [requests.utils.unquote(twitter_image["content"].strip())]
         elif og_image:
             urls = [requests.utils.unquote(og_image["content"].strip())]
     return urls
