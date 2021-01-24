@@ -10,6 +10,8 @@ MAX_NEWLINES = 11
 
 def parse_status(status):
     status_id = status.id
+    author_id = status.user.id
+    quote_author_id = status.quoted_status.user.id if status.quoted_status else None
     created_at = \
         datetime.strptime(status.created_at, '%a %b %d %H:%M:%S +0000 %Y').strftime('%Y-%m-%d %H:%M:%S')
     unixtime = \
@@ -20,6 +22,9 @@ def parse_status(status):
         html_parser.unescape(status.quoted_status.full_text if status.quoted_status else None
     if parsed_txt.count('\n') > MAX_NEWLINES:
         parsed_txt = parsed_txt.replace('\n', ' ')
+    if status.quoted_status and parsed_quote_txt.count('\n') > MAX_NEWLINES:
+        parsed_quote_txt = parsed_quote_txt.replace('\n', ' ')
+
     ext_url = None
     for u in status.urls:
         unquoted_url = requests.utils.unquote(u.expanded_url)
@@ -31,19 +36,6 @@ def parse_status(status):
     media_url, parsed_txt = get_twitter_media_url(status, parsed_txt)
     if ext_url and (not media_url or (media_url and 'video' not in media_url)):
         media_url, parsed_txt = get_ext_media_url(ext_url, media_url, parsed_txt)
-
-    if status.retweeted_status:
-        retweet_user = status.retweeted_status.user
-        status = status.retweeted_status
-        parsed_txt = 'RT @' + retweet_user.screen_name + ': ' + parsed_txt
-    elif status.quoted_status:
-        user = status.quoted_status.user.screen_name
-        quote = html_parser.unescape(status.quoted_status.full_text)
-        if quote.count('\n') > MAX_NEWLINES:
-            quote = quote.replace('\n', '')
-        parsed_txt = \
-            parsed_txt + "\n\n" + "@" + user + ": \"" + quote + "\""
-        status = status.quoted_status
 
     for u in status.urls:  # repeat url process with the retweeted/quoted url
         unquoted_url = requests.utils.unquote(u.expanded_url)
