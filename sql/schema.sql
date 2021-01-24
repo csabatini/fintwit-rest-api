@@ -85,13 +85,34 @@ CREATE TABLE status_word (
     PRIMARY KEY (status_word_id )
 ) DEFAULT CHARSET=utf8;
 
-CREATE TABLE status_v2 (
+CREATE TABLE status (
     status_id varchar(36) NOT NULL,
+    author_id int NOT NULL,
     text varchar(1000) NOT NULL,
     media_url varchar(500) NULL,
     created_at timestamp NOT NULL,
-    PRIMARY KEY (status_id)
+    PRIMARY KEY (status_id),
+    FOREIGN KEY (author_id) REFERENCES author(author_id)
 ) DEFAULT CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci;
+
+-- ALTER TABLE status MODIFY COLUMN media_url varchar(500) NULL;
+
+CREATE TABLE author (
+    author_id int NOT NULL,
+    screen_name varchar(100) NOT NULL,
+    name varchar(255) NOT NULL,
+    profile_img_url varchar(500) NULL,
+    location varchar(255) NOT NULL,
+    description varchar(500) NOT NULL,
+    PRIMARY KEY (author_id)
+) DEFAULT CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci;
+
+CREATE VIEW status_author AS
+(
+    SELECT s.status_id, a.screen_name, s.profile_img_url, a.name, s.text, s.created_at
+    FROM status s INNER JOIN author a
+    ON s.author_id = a.author_id 
+);
 
 CREATE TABLE tag (
     tag_id int NOT NULL AUTO_INCREMENT,
