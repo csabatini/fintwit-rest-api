@@ -2,6 +2,7 @@ from datetime import datetime
 from HTMLParser import HTMLParser
 from bs4 import BeautifulSoup
 import requests
+import re
 
 
 html_parser = HTMLParser()
