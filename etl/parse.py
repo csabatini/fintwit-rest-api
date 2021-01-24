@@ -19,7 +19,7 @@ def parse_status(status):
     parsed_txt = \
         html_parser.unescape(status.retweeted_status.full_text if status.retweeted_status else status.full_text)
     parsed_quote_txt = \
-        html_parser.unescape(status.quoted_status.full_text if status.quoted_status else None
+        html_parser.unescape(status.quoted_status.full_text) if status.quoted_status else None
     if parsed_txt.count('\n') > MAX_NEWLINES:
         parsed_txt = parsed_txt.replace('\n', ' ')
     if status.quoted_status and parsed_quote_txt.count('\n') > MAX_NEWLINES:
