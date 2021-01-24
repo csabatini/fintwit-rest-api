@@ -40,7 +40,7 @@ def parse_status(status):
 
     # get the media from the original tweet
     media_urls, parsed_txt = get_twitter_media_urls(status, parsed_txt)
-    if ext_url and not media_urls or (media_urls and not [u for u in media_urls if 'video' in u]):
+    if ext_url and not media_urls:
         media_urls, parsed_txt = get_ext_media_url(ext_url, media_urls, parsed_txt)
 
     if status.quoted_status:
