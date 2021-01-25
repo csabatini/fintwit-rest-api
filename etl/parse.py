@@ -1,5 +1,6 @@
 from datetime import datetime
 from HTMLParser import HTMLParser
+# from html.parser import HTMLParser
 from bs4 import BeautifulSoup
 import requests
 import re
@@ -91,7 +92,14 @@ def parse_status(status):
 
 def get_ext_media_url(ext_url, media_urls):
     urls = media_urls 
-    headers = {'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/50.0.2661.102 Safari/537.36'}
+    headers = {
+        'user-agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/56.0.2924.87 Safari/537.36',
+        'referrer': 'https://google.com',
+        'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8',
+        'Accept-Encoding': 'gzip, deflate, br',
+        'Accept-Language': 'en-US,en;q=0.9',
+        'Pragma': 'no-cache'
+    }
     try:
         response = requests.get(ext_url, headers=headers, timeout=15)
     except Exception as e:
