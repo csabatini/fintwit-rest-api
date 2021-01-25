@@ -9,6 +9,18 @@ html_parser = HTMLParser()
 MAX_NEWLINES = 11
 
 
+def parse_user(status, users):
+    u = {"author_id": status.user.id, "screen_name": status.user.screen_name, "name": status.user.screen_name,
+         "location": status.user.location, "description": status.user.description,
+         "profile_img_url": status.user.profile_image_url_https.replace('_normal', '_400x400')}
+    users[status.user.id] = u
+    if status.quoted_status:
+        status = status.quoted_status
+        qu = {"author_id": status.user.id, "screen_name": status.user.screen_name, "name": status.user.screen_name,
+              "location": status.user.location, "description": status.user.description,
+              "profile_img_url": status.user.profile_image_url_https.replace('_normal', '_400x400')}
+        users[status.user.id] = qu
+
 def parse_status(status):
     status_id = status.id
     author_id = status.user.id
