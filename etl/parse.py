@@ -87,7 +87,7 @@ def parse_status(status):
     elif status.user.screen_name == 'OptionsAction' and not re.findall("\$[A-Z]{2,}", parsed_txt):
         return None
     elif status.user.screen_name == 'CNBCClosingBell' and \
-        (not re.findall("\$[A-Z]{2,}", parsed_txt) and not 'S&P' in parsed_txt)
+        (not re.findall("\$[A-Z]{2,}", parsed_txt) and not 'S&P' in parsed_txt):
         return None
     else:
         return tweet_dict
