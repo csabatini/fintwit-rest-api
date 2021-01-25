@@ -87,6 +87,8 @@ def parse_status(status):
 
     if status.user.screen_name == 'CNBC' and not re.findall("[0-9]+.[0-9]+%", parsed_txt):
         return None
+    elif status.user.screen_name == 'LiveSquawk' and not re.findall("\$[A-Z]{2,}", parsed_txt):
+        return None
     else:
         return tweet_dict
 
