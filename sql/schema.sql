@@ -81,11 +81,10 @@ CREATE TABLE user_profile (
 CREATE TABLE status (
     status_id bigint NOT NULL,
     author_id bigint NOT NULL,
+    created_at timestamp NOT NULL,
     text varchar(1000) NOT NULL,
     quote_author_id bigint NULL,
     quote_text varchar(1000) NULL,
-    media_url varchar(500) NULL,
-    created_at timestamp NOT NULL,
     PRIMARY KEY (status_id),
     FOREIGN KEY (author_id) REFERENCES author(author_id)
 ) DEFAULT CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci;
@@ -108,8 +107,6 @@ CREATE VIEW status_author AS
     FROM status s INNER JOIN author a
     ON s.author_id = a.author_id 
 );
-
--- CREATE TABLE status_media
 
 CREATE TABLE status_media (
     status_media_id bigint NOT NULL AUTO_INCREMENT,
