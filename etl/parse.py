@@ -58,22 +58,17 @@ def parse_status(status):
         media_urls = get_ext_media_url(ext_url, media_urls)
 
     if status.quoted_status:
-        status = status.quoted_status
-        for u in status.urls:  # repeat url process with the retweeted/quoted url
+        for u in status.quoted_status.urls:  # repeat url process with the retweeted/quoted url
             unquoted_url = requests.utils.unquote(u.expanded_url)
             parsed_quote_txt = parsed_quote_txt.replace(u.url, unquoted_url)
             if 'twitter.com' not in unquoted_url and not unquoted_url.endswith(('.pdf', '.jpg', '.mp4')):
                 ext_url = unquoted_url
-
-    # possibly override the original media with retweet/quote media
-    if status.id != status_id:
         tmp_media, parsed_quote_txt = get_twitter_media_urls(status, parsed_quote_txt)
-        if tmp_media:
+        if tmp_media and not media_urls:
             media_urls = tmp_media
-        elif ext_url:
-            tmp_media = get_ext_media_url(ext_url, media_urls)
-            if tmp_media:
-                media_urls = tmp_media
+        if ext_url and not media_urls:
+            media_urls = get_ext_media_url(ext_url, media_urls)
+
     tweet_dict = {
         'id': status_id,
         'author_id': author_id,
