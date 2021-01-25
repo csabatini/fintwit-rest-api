@@ -113,10 +113,8 @@ CREATE TABLE status_media (
     status_id bigint NOT NULL,
     media_url varchar(500) NOT NULL,
     PRIMARY KEY (status_media_id),
-    FOREIGN KEY (status_id) REFERENCES status(status_id),
-    UNIQUE KEY status_id_media_url (status_id, media_url)
-
-) DEFAULT CHARSET=utf8;
+    FOREIGN KEY (status_id) REFERENCES status(status_id)
+) DEFAULT CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci;
 
 -- remove
 CREATE TABLE tag_alias (
