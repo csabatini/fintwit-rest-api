@@ -111,12 +111,17 @@ CREATE VIEW status_author AS
 
 -- CREATE TABLE status_media
 
-CREATE TABLE tag (
-    tag_id int NOT NULL AUTO_INCREMENT,
-    tag varchar(25) NOT NULL,
-    PRIMARY KEY (tag_id)
+CREATE TABLE status_media (
+    status_media_id bigint NOT NULL AUTO_INCREMENT,
+    status_id bigint NOT NULL,
+    media_url varchar(500) NOT NULL,
+    PRIMARY KEY (status_media_id),
+    FOREIGN KEY (status_id) REFERENCES status(status_id),
+    UNIQUE KEY status_id_media_url (status_id, media_url)
+
 ) DEFAULT CHARSET=utf8;
 
+-- remove
 CREATE TABLE tag_alias (
     tag_alias_id int NOT NULL AUTO_INCREMENT,
     tag_id int NOT NULL,
