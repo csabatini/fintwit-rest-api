@@ -66,8 +66,8 @@ CREATE TABLE favorite (
      UNIQUE(status_id)
 );
 
--- trumptweets mysql
-CREATE DATABASE trumptweets CHARACTER SET = utf8mb4 COLLATE utf8mb4_general_ci;
+-- fintwit mysql
+CREATE DATABASE fintwit CHARACTER SET = utf8mb4 COLLATE utf8mb4_general_ci;
 
 CREATE TABLE user_profile (
     guid varchar(36) NOT NULL,
@@ -76,13 +76,6 @@ CREATE TABLE user_profile (
     created_time timestamp DEFAULT CURRENT_TIMESTAMP,
     status_max_created_at timestamp NULL DEFAULT NULL,
     PRIMARY KEY (guid)
-) DEFAULT CHARSET=utf8;
-
--- temporary
-CREATE TABLE status_word (
-    status_word_id int NOT NULL AUTO_INCREMENT,
-    word varchar(20) NOT NULL,
-    PRIMARY KEY (status_word_id )
 ) DEFAULT CHARSET=utf8;
 
 CREATE TABLE status (
