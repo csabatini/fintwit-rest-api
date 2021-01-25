@@ -103,9 +103,18 @@ CREATE TABLE author (
 
 CREATE VIEW status_author AS
 (
-    SELECT s.status_id, a.screen_name, s.profile_img_url, a.name, s.text, s.created_at
-    FROM status s INNER JOIN author a
-    ON s.author_id = a.author_id 
+    SELECT s.status_id, 
+        s.created_at,
+        a.screen_name,
+        a.name,
+        s.profile_img_url,
+        s.text,
+        a2.screen_name AS quote_screen_name,
+        a2.name AS quote_name,
+        s.quote_text
+    FROM status s INNER JOIN author a1
+    ON s.author_id = a1.author_id LEFT JOIN author a2
+    ON s.quote_author_id = a2.author_id
 );
 
 CREATE TABLE status_media (
