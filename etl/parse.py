@@ -7,7 +7,7 @@ import re
 
 
 html_parser = HTMLParser()
-MAX_NEWLINES = 11
+# MAX_NEWLINES = 11
 
 
 def parse_user(status, users):
@@ -34,10 +34,10 @@ def parse_status(status):
         html_parser.unescape(status.retweeted_status.full_text if status.retweeted_status else status.full_text)
     parsed_quote_txt = \
         html_parser.unescape(status.quoted_status.full_text) if status.quoted_status else None
-    if parsed_txt.count('\n') > MAX_NEWLINES:
-        parsed_txt = parsed_txt.replace('\n', ' ')
-    if status.quoted_status and parsed_quote_txt.count('\n') > MAX_NEWLINES:
-        parsed_quote_txt = parsed_quote_txt.replace('\n', ' ')
+    # if parsed_txt.count('\n') > MAX_NEWLINES:
+    #     parsed_txt = parsed_txt.replace('\n', ' ')
+    # if status.quoted_status and parsed_quote_txt.count('\n') > MAX_NEWLINES:
+    #     parsed_quote_txt = parsed_quote_txt.replace('\n', ' ')
 
     ext_url = None
     if status.quoted_status:
