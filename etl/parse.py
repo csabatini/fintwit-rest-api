@@ -128,6 +128,8 @@ def get_twitter_media_urls(stat, txt):
     if stat.media is not None and len(stat.media) > 0:
         for u in stat.media:
             url = u.media_url_https
+            if 'pscp.tv' in url:
+                continue
             for m in stat.media:
                 txt = txt.replace(m.url, m.display_url)
             if u.video_info is not None:
