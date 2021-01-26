@@ -101,7 +101,7 @@ CREATE TABLE author (
     PRIMARY KEY (author_id)
 ) DEFAULT CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci;
 
-CREATE VIEW status_author AS
+CREATE VIEW vw_status_author AS
 (
     SELECT s.status_id, 
         s.created_at,
