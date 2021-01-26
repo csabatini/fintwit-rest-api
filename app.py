@@ -47,23 +47,12 @@ def status():
 
     results = Status.query.filter(Status.created_at <= filter_date) \
         .order_by(desc(Status.created_at)) \
-        .limit(10) \
+        .limit(100) \
         .all()
     g._kv['count'] = len(results)
     g._kv['userguid'] = dict(request.headers).get('Userguid', None)
 
     return jsonify([r.as_dict() for r in results])
-
-
-@app.route('/api/v1/tag', methods=['GET'])
-def tag():
-    if request.args is None or 'id' not in request.args:
-        return jsonify([x.as_dict() for x in TagCountMaxCreated.query.all()])
-    else:
-        return jsonify(TagCountMaxCreated.query
-                       .filter_by(tag_id=request.args['id'])
-                       .first_or_404()
-                       .as_dict())
 
 
 @app.route('/api/v1/user', methods=['POST'])
@@ -95,26 +84,6 @@ def user_profile():
 
     db.session.commit()
     return jsonify(user.as_dict())
-
-
-@app.route('/api/v1/offset', methods=['POST'])
-def offset():
-    payload = request.get_json()
-    if type(payload) is not dict or payload['user_profile']['guid'] is None:
-        abort(400)
-    elif payload['max_created_at'] == 0:
-        return 'OK'
-
-    user = UserProfile.query.filter_by(guid=payload['user_profile']['guid']).first()
-    new_max_created_at = datetime.fromtimestamp(long(payload['max_created_at']) / 1000.0)
-    g._kv['action'] = 'save_offset'
-    g._kv['userguid'] = str(user.guid)
-
-    if user.status_max_created_at is None or new_max_created_at > user.status_max_created_at:
-        user.status_max_created_at = new_max_created_at
-        db.session.commit()
-
-    return 'OK'
 
 
 @app.route('/api/v1/push-sent', methods=['POST'])
