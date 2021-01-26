@@ -61,10 +61,9 @@ class Status(db.Model, BaseModel):
         self.quote_text = quote_text
 
     def as_dict(self):
-        dict = {}
-        dict['status'] = BaseModel.as_dict(self)
-        dict['status']['created_at'] = get_unixtime(self.created_at)
-        dict['media_urls'] = [x.serialize() for x in self.media_urls]
+        dict = BaseModel.as_dict(self)
+        dict['created_at'] = get_unixtime(self.created_at)
+        dict['media_urls'] = [x.media_url for x in self.media_urls]
         return dict
 
 
@@ -78,9 +77,6 @@ class StatusMedia(db.Model, BaseModel):
         self.status_media_id = status_media_id
         self.status_id = status_id
         self.media_url = media_url
-
-    def serialize(self):
-        return self.media_url
 
 # class Author(db.Model, BaseModel):
 #     __tablename__ = 'author'
