@@ -63,7 +63,7 @@ def parse_status(status):
             parsed_quote_txt = parsed_quote_txt.replace(u.url, unquoted_url)
             if 'twitter.com' not in unquoted_url and not unquoted_url.endswith(('.pdf', '.jpg', '.mp4')):
                 ext_url = unquoted_url
-        tmp_media, parsed_quote_txt = get_twitter_media_urls(status, parsed_quote_txt)
+        tmp_media, parsed_quote_txt = get_twitter_media_urls(status.quoted_status, parsed_quote_txt)
         if tmp_media and not media_urls:
             media_urls = tmp_media
         if ext_url and not media_urls:
