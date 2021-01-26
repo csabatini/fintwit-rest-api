@@ -33,61 +33,65 @@ class UserProfile(db.Model, BaseModel):
 
 
 class Status(db.Model, BaseModel):
-    __tablename__ = 'status_v2'
-    status_id = db.Column(db.String(36), primary_key=True)
-    text = db.Column(db.String(255))
-    media_url = db.Column(db.String(500))
+    __tablename__ = 'vw_status_author'
+    status_id = db.Column(db.Integer, primary_key=True)
     created_at = db.Column(db.DateTime)
+    author_id = db.Column(db.Integer)
+    screen_name = db.Column(db.String(255))
+    name = db.Column(db.String(255))
+    profile_img_url = db.Column(db.String(255))
+    text = db.Column(db.String(255))
+    quote_screen_name = db.Column(db.String(255))
+    quote_name = db.Column(db.String(255))
+    quote_text = db.Column(db.String(255))
 
-    tags = db.relationship("StatusTag", backref="status")
+    # tags = db.relationship("StatusTag", backref="status")
 
-    def __init__(self, status_id=None, text=None, media_url=None, created_at=None):
+    def __init__(self, status_id=None, created_at=None, author_id=None, screen_name=None, name=None,
+                 profile_img_url=None, text=None, quote_screen_name=None, quote_name=None, quote_text=None):
         self.status_id = status_id
-        self.text = text
-        self.media_url = media_url
         self.created_at = created_at
+        self.author_id = author_id
+        self.screen_name = screen_name
+        self.name = name
+        self.profile_img_url = profile_img_url
+        self.text = text
+        self.quote_screen_name = quote_screen_name
+        self.quote_name = quote_name
+        self.quote_text = quote_text
 
     def as_dict(self):
         dict = {}
         dict['status'] = BaseModel.as_dict(self)
         dict['status']['created_at'] = get_unixtime(self.created_at)
-        dict['tags'] = [x.as_dict() for x in self.tags]
+        # dict['tags'] = [x.as_dict() for x in self.tags]
         return dict
 
 
-class Tag(db.Model, BaseModel):
-    __tablename__ = 'tag'
-    tag_id = db.Column(db.Integer, primary_key=True)
-    tag = db.Column(db.String(25))
+# class Author(db.Model, BaseModel):
+#     __tablename__ = 'author'
+#     user_id = db.Column(db.Integer, primary_key=True)
+#     screen_name = db.Column(db.String(100))
+#     name = db.Column(db.String(100))
+#     profile_img_url = db.Column(db.String(500))
+#     location = db.Column(db.String(200))
+#     description = db.Column(db.String(500))
 
-    def __init__(self, tag_id=None, tag=None):
-        self.tag_id = tag_id
-        self.tag = tag
-
-
-class StatusTag(db.Model, BaseModel):
-    __tablename__ = 'status_tag_v2'
-    status_tag_v2_id = db.Column(db.Integer, primary_key=True)
-    status_id = db.Column(db.String(36), ForeignKey(Status.status_id))
-    tag_id = db.Column(db.Integer, ForeignKey(Tag.tag_id))
-
-    tag = db.relationship('Tag', foreign_keys='StatusTag.tag_id', lazy='joined')
-
-    def as_dict(self):
-        return self.tag.as_dict()
+#     def __init__(self, tag_id=None, tag=None):
+#         self.tag_id = tag_id
+#         self.tag = tag
 
 
-class TagCountMaxCreated(db.Model, BaseModel):
-    __tablename__ = 'vw_tag_count_max_created'
-    tag_id = db.Column(db.Integer, primary_key=True)
-    tag = db.Column(db.String(25))
-    max_created_at = db.Column(db.DateTime)
-    count = db.Column(db.Integer)
+# class StatusTag(db.Model, BaseModel):
+#     __tablename__ = 'status_tag_v2'
+#     status_tag_v2_id = db.Column(db.Integer, primary_key=True)
+#     status_id = db.Column(db.String(36), ForeignKey(Status.status_id))
+#     tag_id = db.Column(db.Integer, ForeignKey(Tag.tag_id))
 
-    def as_dict(self):
-        dict = BaseModel.as_dict(self)
-        dict['max_created_at'] = get_unixtime(self.max_created_at)
-        return dict
+#     tag = db.relationship('Tag', foreign_keys='StatusTag.tag_id', lazy='joined')
+
+#     def as_dict(self):
+#         return self.tag.as_dict()
 
 
 def get_unixtime(timestamp):

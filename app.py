@@ -22,7 +22,7 @@ def setup_app(application):
     username = cnf_parser.get('client', 'user')
     password = cnf_parser.get('client', 'password')
     application.config['SQLALCHEMY_DATABASE_URI'] = \
-        'mysql+mysqldb://%s:%s@localhost/trumptweets?charset=utf8mb4' % (username, password)
+        'mysql+mysqldb://%s:%s@localhost/fintwit?charset=utf8mb4' % (username, password)
     application.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = 'False'
     db.init_app(application)
     dictConfig(LOG_CONFIG)
@@ -35,7 +35,7 @@ setup_app(app)
 
 @app.route("/", methods=['GET'])
 def index():
-    return "Trump Tweets Web Service"
+    return "Fintwit Web Service"
 
 
 @app.route('/api/v1/status', methods=['GET'])
@@ -133,7 +133,7 @@ def push_sent():
 def before_request():
     # TODO: fix the hardcoding of this
     # g._kv = dict(app_id=os.environ.get('APP_ID', None))
-    g._kv = dict(app_id='trumptweets')
+    g._kv = dict(app_id='fintwit')
     return None
 
 

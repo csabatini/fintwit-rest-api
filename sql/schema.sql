@@ -105,9 +105,10 @@ CREATE VIEW status_author AS
 (
     SELECT s.status_id, 
         s.created_at,
-        a.screen_name,
-        a.name,
-        s.profile_img_url,
+        s.author_id,
+        a1.screen_name,
+        a1.name,
+        a1.profile_img_url,
         s.text,
         a2.screen_name AS quote_screen_name,
         a2.name AS quote_name,
