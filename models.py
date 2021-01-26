@@ -45,10 +45,10 @@ class Status(db.Model, BaseModel):
     quote_name = db.Column(db.String(255))
     quote_text = db.Column(db.String(255))
 
-    # tags = db.relationship("StatusTag", backref="status")
+    media_urls = db.relationship("StatusMedia", backref="vw_status_author")
 
     def __init__(self, status_id=None, created_at=None, author_id=None, screen_name=None, name=None,
-                 profile_img_url=None, text=None, quote_screen_name=None, quote_name=None, quote_text=None):
+                 profile_img_url=None, text=None, quote_screen_name=None, quote_name=None, quote_text=None)
         self.status_id = status_id
         self.created_at = created_at
         self.author_id = author_id
@@ -64,9 +64,24 @@ class Status(db.Model, BaseModel):
         dict = {}
         dict['status'] = BaseModel.as_dict(self)
         dict['status']['created_at'] = get_unixtime(self.created_at)
-        # dict['tags'] = [x.as_dict() for x in self.tags]
+        dict['media_urls'] = [x.as_dict() for x in self.media_urls]
         return dict
 
+
+class StatusMedia(db.Model, BaseModel):
+    __tablename__ = 'status_media'
+    status_media_id = db.Column(db.Integer, primary_key=True)
+    status_id = db.Column(db.Integer, ForeignKey(Status.status_id))
+    media_url = db.Column(db.String)
+
+    def __init__(self, status_media_id=None, status_id=None, media_url=None):
+        self.status_media_id = status_media_id
+        self.status_id = status_id
+        self.media_url = media_url
+
+    def as_dict(self):
+        del dict['status_media_id']
+        return self.tag.as_dict()
 
 # class Author(db.Model, BaseModel):
 #     __tablename__ = 'author'
