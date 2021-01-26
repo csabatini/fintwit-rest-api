@@ -47,7 +47,7 @@ def status():
 
     results = Status.query.filter(Status.created_at <= filter_date) \
         .order_by(desc(Status.created_at)) \
-        .limit(100) \
+        .limit(200) \
         .all()
     g._kv['count'] = len(results)
     g._kv['userguid'] = dict(request.headers).get('Userguid', None)
