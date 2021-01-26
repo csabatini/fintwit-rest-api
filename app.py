@@ -10,7 +10,7 @@ import logging
 import time
 import uuid
 
-from models import db, Status, UserProfile, TagCountMaxCreated
+from models import db, Status, UserProfile
 
 app = Flask(__name__)
 
