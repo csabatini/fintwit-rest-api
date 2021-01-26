@@ -48,7 +48,7 @@ class Status(db.Model, BaseModel):
     media_urls = db.relationship("StatusMedia", backref="vw_status_author")
 
     def __init__(self, status_id=None, created_at=None, author_id=None, screen_name=None, name=None,
-                 profile_img_url=None, text=None, quote_screen_name=None, quote_name=None, quote_text=None)
+                 profile_img_url=None, text=None, quote_screen_name=None, quote_name=None, quote_text=None):
         self.status_id = status_id
         self.created_at = created_at
         self.author_id = author_id
@@ -80,8 +80,7 @@ class StatusMedia(db.Model, BaseModel):
         self.media_url = media_url
 
     def as_dict(self):
-        del dict['status_media_id']
-        return self.tag.as_dict()
+        return self.media_url()
 
 # class Author(db.Model, BaseModel):
 #     __tablename__ = 'author'
