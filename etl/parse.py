@@ -24,8 +24,6 @@ def parse_user(status, users):
         users[status.user.id] = qu
 
 def parse_status(status):
-    if status.user.screen_name != 'traderstewie':
-        return None
     status_id = status.id
     author_id = status.user.id
     quote_author_id = status.quoted_status.user.id if status.quoted_status else None
