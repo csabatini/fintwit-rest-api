@@ -117,6 +117,7 @@ def get_ext_media_url(ext_url, media_urls):
     soup = BeautifulSoup(response.text, "html.parser")
     twitter_player = soup.find('meta', attrs={'name': 'twitter:player'})
     twitter_image = soup.find('meta', attrs={'name': 'twitter:image'})
+    og_image = None
 
     for meta in soup.findAll("meta"):
         metaname = meta.get('name', '').lower()
