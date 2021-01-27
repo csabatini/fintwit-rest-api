@@ -113,26 +113,26 @@ def get_ext_media_url(ext_url, media_urls):
     except Exception as e:
         return None
 
-    if response.status_code == 200:
-        soup = BeautifulSoup(response.text, "html.parser")
-        twitter_player = soup.find('meta', attrs={'name': 'twitter:player'})
-        twitter_image = soup.find('meta', attrs={'name': 'twitter:image'})
-        og_image = soup.find('meta', attrs={'property': 'og:image'})
+    if response.status_code != 200:
+        return urls
+
+    soup = BeautifulSoup(response.text, "html.parser")
+    twitter_player = soup.find('meta', attrs={'name': 'twitter:player'})
+    twitter_image = soup.find('meta', attrs={'name': 'twitter:image'})
 
     for meta in soup.findAll("meta"):
-        print meta
         metaname = meta.get('name', '').lower()
         metaprop = meta.get('property', '').lower()
         if 'og:image' == metaname or metaprop.find("og:image")>0:
-            desc = meta['content'].strip()
-            print desc
+            og_image = meta['content'].strip()
 
-        if twitter_player:
-            urls = [requests.utils.unquote(twitter_player["content"].strip())]
-        elif twitter_image:
-            urls = [requests.utils.unquote(twitter_image["content"].strip())]
-        elif og_image:
-            urls = [requests.utils.unquote(og_image["content"].strip())]
+    if twitter_player:
+        urls = [requests.utils.unquote(twitter_player["content"].strip())]
+    elif twitter_image:
+        urls = [requests.utils.unquote(twitter_image["content"].strip())]
+    elif og_image:
+        urls = [requests.utils.unquote(og_image)]
+
     return urls
 
 def get_twitter_media_urls(stat, txt):
