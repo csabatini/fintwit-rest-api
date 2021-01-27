@@ -93,7 +93,6 @@ def parse_status(status):
         (not re.findall("\$[A-Z]{2,}", parsed_txt) and not 'S&P' in parsed_txt):
         return None
     else:
-        print json.dumps(tweet_dict)
         return tweet_dict
 
 def get_ext_media_url(ext_url, media_urls):
