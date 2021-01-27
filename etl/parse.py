@@ -4,6 +4,7 @@ from HTMLParser import HTMLParser
 from bs4 import BeautifulSoup
 import requests
 import re
+import json
 
 
 html_parser = HTMLParser()
@@ -23,6 +24,8 @@ def parse_user(status, users):
         users[status.user.id] = qu
 
 def parse_status(status):
+    if status.user.screen_name != 'traderstewie':
+        return None
     status_id = status.id
     author_id = status.user.id
     quote_author_id = status.quoted_status.user.id if status.quoted_status else None
@@ -92,6 +95,7 @@ def parse_status(status):
         (not re.findall("\$[A-Z]{2,}", parsed_txt) and not 'S&P' in parsed_txt):
         return None
     else:
+        print json.dumps(tweet_dict)
         return tweet_dict
 
 def get_ext_media_url(ext_url, media_urls):
