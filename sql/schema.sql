@@ -74,9 +74,8 @@ CREATE TABLE user_profile (
     push_enabled boolean NOT NULL,
     device_token varchar(200) NULL,
     created_time timestamp DEFAULT CURRENT_TIMESTAMP,
-    status_max_created_at timestamp NULL DEFAULT NULL,
     PRIMARY KEY (guid)
-) DEFAULT CHARSET=utf8;
+) DEFAULT CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci;
 
 CREATE TABLE status (
     status_id bigint NOT NULL,

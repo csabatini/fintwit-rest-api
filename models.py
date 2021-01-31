@@ -17,18 +17,15 @@ class UserProfile(db.Model, BaseModel):
     push_enabled = db.Column(db.Boolean)
     device_token = db.Column(db.String(200))
     created_time = db.Column(db.DateTime)
-    status_max_created_at = db.Column(db.DateTime, nullable=True, default=None)
 
-    def __init__(self, guid=None, push_enabled=None, device_token=None, status_max_created_at=None):
+    def __init__(self, guid=None, push_enabled=None, device_token=None):
         self.guid = guid
         self.push_enabled = push_enabled
         self.device_token = device_token
-        self.status_max_created_at = status_max_created_at
 
     def as_dict(self):
         dict = BaseModel.as_dict(self)
         del dict['created_time']
-        del dict['status_max_created_at']
         return dict
 
 
