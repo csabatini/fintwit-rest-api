@@ -73,10 +73,10 @@ def user_profile():
     token = payload.get('device_token', None)
     push = payload.get('push_enabled', None)
 
-    if token is not None and token != user.device_token:
+    if token and token != user.device_token:
         user.device_token = token
 
-    if push is not None and push != user.push_enabled:
+    if push and push != user.push_enabled:
         user.push_enabled = push
         g._kv['action'] = 'toggle_push'
         g._kv['value'] = push
