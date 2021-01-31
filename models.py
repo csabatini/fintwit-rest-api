@@ -61,8 +61,9 @@ class Status(db.Model, BaseModel):
         self.quote_text = quote_text
 
     def as_dict(self):
-        dict = BaseModel.as_dict(self)
-        dict['created_at'] = get_unixtime(self.created_at)
+        dict = {}
+        dict['status'] = BaseModel.as_dict(self)
+        dict['status']['created_at'] = get_unixtime(self.created_at)
         dict['media_urls'] = [x.media_url for x in self.media_urls]
         return dict
 
