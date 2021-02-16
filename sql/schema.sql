@@ -35,12 +35,19 @@ CREATE TABLE user_profile (
 
 CREATE TABLE status (
      status_id TEXT NOT NULL PRIMARY KEY,
-     screen_name TEXT NOT NULL,
-     name TEXT NOT NULL,
+     created_at INTEGER NOT NULL,
+     author_id INTEGER NOT NULL,
+     author_screen_name TEXT NOT NULL,
+     author_name TEXT NOT NULL,
      profile_img_url TEXT NULL,
      text TEXT NOT NULL,
-     media_url TEXT NULL,
-     created_at INTEGER NOT NULL,
+     quote_screen_name TEXT NULL,
+     quote_name TEXT NULL,
+     quote_text TEXT NULL,
+     media_url_1 TEXT NULL,
+     media_url_2 TEXT NULL,
+     media_url_3 TEXT NULL,
+     media_url_4 TEXT NULL,
      loaded_at INTEGER NOT NULL,
      UNIQUE(status_id)
 );
