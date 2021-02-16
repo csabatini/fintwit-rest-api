@@ -34,11 +34,11 @@ CREATE TABLE user_profile (
 --INSERT INTO user_profile (push_enabled) VALUES (1);
 
 CREATE TABLE status (
-     status_id TEXT NOT NULL PRIMARY KEY,
+     status_id INTEGER NOT NULL PRIMARY KEY,
      created_at INTEGER NOT NULL,
      author_id INTEGER NOT NULL,
-     author_screen_name TEXT NOT NULL,
-     author_name TEXT NOT NULL,
+     screen_name TEXT NOT NULL,
+     name TEXT NOT NULL,
      profile_img_url TEXT NULL,
      text TEXT NOT NULL,
      quote_screen_name TEXT NULL,
