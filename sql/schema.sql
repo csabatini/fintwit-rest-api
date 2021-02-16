@@ -52,6 +52,16 @@ CREATE TABLE status (
      UNIQUE(status_id)
 );
 
+CREATE TABLE favorite (
+     author_id INTEGER NOT NULL,
+     UNIQUE(author_id)
+);
+
+CREATE TABLE ignore (
+     author_id INTEGER NOT NULL,
+     UNIQUE(author_id)
+);
+
 CREATE TABLE tag (
      tag_id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
      tag TEXT NOT NULL,
@@ -65,12 +75,6 @@ CREATE TABLE status_tag (
      FOREIGN KEY (status_id) REFERENCES status(status_id),
      FOREIGN KEY (tag_id) REFERENCES tag(tag_id),
      UNIQUE(status_id, tag_id)
-);
-
-CREATE TABLE favorite (
-     status_id TEXT NOT NULL,
-     FOREIGN KEY (status_id) REFERENCES status(status_id),
-     UNIQUE(status_id)
 );
 
 -- fintwit mysql
