@@ -53,12 +53,12 @@ CREATE TABLE status (
 );
 
 CREATE TABLE favorite (
-     author_id INTEGER NOT NULL,
+     author_id INTEGER NOT NULL PRIMARY KEY,
      UNIQUE(author_id)
 );
 
 CREATE TABLE ignore (
-     author_id INTEGER NOT NULL,
+     author_id INTEGER NOT NULL PRIMARY KEY,
      UNIQUE(author_id)
 );
 
