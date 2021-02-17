@@ -81,6 +81,16 @@ CREATE TABLE status_tag (
 -- fintwit mysql
 CREATE DATABASE fintwit CHARACTER SET = utf8mb4 COLLATE utf8mb4_general_ci;
 
+CREATE TABLE author (
+    author_id bigint NOT NULL,
+    screen_name varchar(100) NOT NULL,
+    name varchar(255) NOT NULL,
+    profile_img_url varchar(500) NULL,
+    location varchar(255) NOT NULL,
+    description varchar(500) NOT NULL,
+    PRIMARY KEY (author_id)
+) DEFAULT CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci;
+
 CREATE TABLE user_profile (
     guid varchar(36) NOT NULL,
     push_enabled boolean NOT NULL,
@@ -98,18 +108,6 @@ CREATE TABLE status (
     quote_text varchar(1000) NULL,
     PRIMARY KEY (status_id),
     FOREIGN KEY (author_id) REFERENCES author(author_id)
-) DEFAULT CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci;
-
--- ALTER TABLE status MODIFY COLUMN media_url varchar(500) NULL;
-
-CREATE TABLE author (
-    author_id bigint NOT NULL,
-    screen_name varchar(100) NOT NULL,
-    name varchar(255) NOT NULL,
-    profile_img_url varchar(500) NULL,
-    location varchar(255) NOT NULL,
-    description varchar(500) NOT NULL,
-    PRIMARY KEY (author_id)
 ) DEFAULT CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci;
 
 CREATE VIEW vw_status_author AS
@@ -130,12 +128,11 @@ CREATE VIEW vw_status_author AS
 );
 
 CREATE TABLE status_media (
-    status_media_id bigint NOT NULL AUTO_INCREMENT,
     status_id bigint NOT NULL,
-    media_url varchar(500) NOT NULL,
-    PRIMARY KEY (status_media_id),
+    media_url varchar(255) NOT NULL,
+    CONSTRAINT pk_status_meida PRIMARY KEY (status_id,media_url),
     FOREIGN KEY (status_id) REFERENCES status(status_id)
-) DEFAULT CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci;
+) DEFAULT CHARACTER SET = utf8 COLLATE = utf8_general_ci;
 
 -- remove
 CREATE TABLE tag_alias (
