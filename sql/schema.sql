@@ -119,6 +119,7 @@ CREATE VIEW vw_status_author AS
         a1.name,
         a1.profile_img_url,
         s.text,
+        a2.author_id AS quote_author_id,
         a2.screen_name AS quote_screen_name,
         a2.name AS quote_name,
         s.quote_text
