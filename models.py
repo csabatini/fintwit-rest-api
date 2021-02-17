@@ -74,19 +74,25 @@ class StatusMedia(db.Model, BaseModel):
         self.status_id = status_id
         self.media_url = media_url
 
-# class Author(db.Model, BaseModel):
-#     __tablename__ = 'author'
-#     user_id = db.Column(db.Integer, primary_key=True)
-#     screen_name = db.Column(db.String(100))
-#     name = db.Column(db.String(100))
-#     profile_img_url = db.Column(db.String(500))
-#     location = db.Column(db.String(200))
-#     description = db.Column(db.String(500))
+class Author(db.Model, BaseModel):
+    __tablename__ = 'author'
+    author_id = db.Column(db.Integer, primary_key=True)
+    screen_name = db.Column(db.String(100))
+    name = db.Column(db.String(100))
+    profile_img_url = db.Column(db.String(500))
+    location = db.Column(db.String(200))
+    description = db.Column(db.String(500))
 
-#     def __init__(self, tag_id=None, tag=None):
-#         self.tag_id = tag_id
-#         self.tag = tag
+class UserFavorite(db.Model, BaseModel):
+    __tablename__ = 'user_favorite'
+    user_guid = db.Column(db.Integer, ForeignKey(UserProfile.guid))
+    author_id = db.Column(db.Integer, ForeignKey(Author.author_id))
+    active = db.Column(db.Integer)
 
+    def __init__(self, user_guid=None, author_id=None, active=None):
+        self.user_guid = user_guid
+        self.author_id = author_id
+        self.active = active
 
 # class StatusTag(db.Model, BaseModel):
 #     __tablename__ = 'status_tag_v2'

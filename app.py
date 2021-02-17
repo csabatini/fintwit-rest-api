@@ -10,7 +10,7 @@ import logging
 import time
 import uuid
 
-from models import db, Status, UserProfile
+from models import db, Status, UserProfile, UserFavorite
 
 app = Flask(__name__)
 
@@ -50,7 +50,7 @@ def status():
         .limit(200) \
         .all()
     g._kv['count'] = len(results)
-    g._kv['userguid'] = dict(request.headers).get('Userguid', None)
+    g._kv['userguid'] = dict(request.headers).get('Userguid', None) # ??
 
     return jsonify([r.as_dict() for r in results])
 
@@ -85,6 +85,17 @@ def user_profile():
     db.session.commit()
     return jsonify(user.as_dict())
 
+@app.route('/api/v1/favorite', methods=['POST'])
+def favorite():
+    payload = request.get_json()
+    if type(payload) is not dict or 'user_profile' not in payload.keys():
+        abort(400)
+    user = UserProfile.query.filter_by(guid=payload['guid']).first_or_404()
+
+    # for x in y: 
+    favorite = UserFavorite(user.guid, 'author_id', 'active')
+    db.session.add(favorite)
+    db.session.commit()
 
 @app.route('/api/v1/push-sent', methods=['POST'])
 def push_sent():
