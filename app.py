@@ -55,7 +55,7 @@ def status():
     return jsonify([r.as_dict() for r in results])
 
 @app.route('/api/v1/author', methods=['GET'])
-def status():
+def author():
     g._kv['action'] = 'query'
     author_id = None
     if request.args is not None and 'author_id' in request.args:
