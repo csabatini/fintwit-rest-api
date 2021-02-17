@@ -67,12 +67,10 @@ class Status(db.Model, BaseModel):
 
 class StatusMedia(db.Model, BaseModel):
     __tablename__ = 'status_media'
-    status_media_id = db.Column(db.Integer, primary_key=True)
     status_id = db.Column(db.Integer, ForeignKey(Status.status_id))
     media_url = db.Column(db.String)
 
-    def __init__(self, status_media_id=None, status_id=None, media_url=None):
-        self.status_media_id = status_media_id
+    def __init__(self, status_id=None, media_url=None):
         self.status_id = status_id
         self.media_url = media_url
 
