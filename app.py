@@ -88,9 +88,18 @@ def user_profile():
 @app.route('/api/v1/favorite', methods=['POST'])
 def favorite():
     payload = request.get_json()
-    if type(payload) is not dict or 'user_profile' not in payload.keys():
+    if type(payload) is not dict:
         abort(400)
-    user = UserProfile.query.filter_by(guid=payload['guid']).first_or_404()
+
+    user_guid = None
+    fav_list = []
+    try:
+        user_guid = payload['user_profile']['guid']
+        fav_list = payload['favorite_list']
+    except Exception as e:
+        abort(400)
+
+    user = UserProfile.query.filter_by(guid=user_guid).first_or_404()
 
     # for x in y: 
     favorite = UserFavorite(user.guid, 'author_id', 'active')
