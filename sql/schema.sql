@@ -41,6 +41,7 @@ CREATE TABLE status (
      name TEXT NOT NULL,
      profile_img_url TEXT NULL,
      text TEXT NOT NULL,
+     quote_author_id TEXT NULL,
      quote_screen_name TEXT NULL,
      quote_name TEXT NULL,
      quote_text TEXT NULL,
