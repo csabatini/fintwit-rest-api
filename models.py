@@ -86,8 +86,8 @@ class Author(db.Model, BaseModel):
 
 class UserFavorite(db.Model, BaseModel):
     __tablename__ = 'user_favorite'
-    user_guid = db.Column(db.Integer, ForeignKey(UserProfile.guid))
-    author_id = db.Column(db.Integer, ForeignKey(Author.author_id))
+    user_guid = db.Column(db.Integer, ForeignKey(UserProfile.guid), primary_key=True)
+    author_id = db.Column(db.Integer, ForeignKey(Author.author_id), primary_key=True)
     active = db.Column(db.Integer)
 
     def __init__(self, user_guid=None, author_id=None, active=None):

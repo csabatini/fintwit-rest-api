@@ -99,6 +99,15 @@ CREATE TABLE user_profile (
     PRIMARY KEY (guid)
 ) DEFAULT CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci;
 
+CREATE TABLE user_favorite (
+    user_guid varchar(36) NOT NULL,
+    author_id bigint NOT NULL,
+    active boolean NOT NULL,
+    CONSTRAINT pk_user_favorite PRIMARY KEY (user_guid,author_id),
+    FOREIGN KEY (user_guid) REFERENCES user_profile(guid),
+    FOREIGN KEY (author_id) REFERENCES author(author_id)
+) DEFAULT CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci;
+
 CREATE TABLE status (
     status_id bigint NOT NULL,
     author_id bigint NOT NULL,
