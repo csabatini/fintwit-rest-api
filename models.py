@@ -38,6 +38,7 @@ class Status(db.Model, BaseModel):
     name = db.Column(db.String(255))
     profile_img_url = db.Column(db.String(255))
     text = db.Column(db.String(255))
+    quote_author_id = db.Column(db.Integer)
     quote_screen_name = db.Column(db.String(255))
     quote_name = db.Column(db.String(255))
     quote_text = db.Column(db.String(255))
