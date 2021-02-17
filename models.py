@@ -80,7 +80,7 @@ class Author(db.Model, BaseModel):
     screen_name = db.Column(db.String(100))
     name = db.Column(db.String(100))
     profile_img_url = db.Column(db.String(500))
-    location = db.Column(db.String(200))
+    location = db.Column(db.String(255))
     description = db.Column(db.String(500))
 
 class UserFavorite(db.Model, BaseModel):

@@ -40,7 +40,7 @@ def index():
 
 @app.route('/api/v1/status', methods=['GET'])
 def status():
-    g._kv['action'] = 'load'
+    g._kv['action'] = 'query'
     filter_date = datetime.utcnow()
     if request.args is not None and 'max_created_at' in request.args:
         filter_date = datetime.fromtimestamp(long(request.args['max_created_at']) / 1000.0)
@@ -50,9 +50,21 @@ def status():
         .limit(200) \
         .all()
     g._kv['count'] = len(results)
-    g._kv['userguid'] = dict(request.headers).get('Userguid', None) # ??
+    g._kv['userguid'] = dict(request.headers).get('Userguid', None)
 
     return jsonify([r.as_dict() for r in results])
+
+@app.route('/api/v1/author', methods=['GET'])
+def status():
+    g._kv['action'] = 'query'
+    author_id = None
+    if request.args is not None and 'author_id' in request.args:
+        author_id = long(request.args['author_id'])
+    else:
+        abort(400)
+
+    result = Author.query.filter(Author.author_id == author_id).first_or_404()
+    return jsonify(r.as_dict())
 
 
 @app.route('/api/v1/user', methods=['POST'])
@@ -105,18 +117,6 @@ def favorite():
     favorite = UserFavorite(user.guid, 'author_id', 'active')
     db.session.add(favorite)
     db.session.commit()
-
-@app.route('/api/v1/push-sent', methods=['POST'])
-def push_sent():
-    payload = request.get_json()
-    if type(payload) is not dict or 'count' not in payload.keys():
-        abort(400)
-
-    g._kv['action'] = 'push_sent'
-    g._kv['count'] = payload['count']
-
-    return 'OK'
-
 
 @app.before_request
 def before_request():
