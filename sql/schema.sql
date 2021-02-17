@@ -54,6 +54,7 @@ CREATE TABLE status (
 
 CREATE TABLE favorite (
      author_id INTEGER NOT NULL PRIMARY KEY,
+     enabled INTEGER NOT NULL,
      UNIQUE(author_id)
 );
 
