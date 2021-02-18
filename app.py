@@ -10,7 +10,7 @@ import logging
 import time
 import uuid
 
-from models import db, Author, Status, UserProfile, UserFavorite
+from models import db, Status, UserProfile, UserFavorite
 
 app = Flask(__name__)
 
