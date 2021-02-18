@@ -60,11 +60,10 @@ def author():
     author_id = None
     if request.args is not None and 'author_id' in request.args:
         author_id = long(request.args['author_id'])
+        result = Author.query.filter(Author.author_id == author_id).first_or_404()
+        return jsonify(result.as_dict())
     else:
-        abort(400)
-
-    result = Author.query.filter(Author.author_id == author_id).first_or_404()
-    return jsonify(r.as_dict())
+        return jsonify([r.as_dict() for r in Author.query.all()])
 
 
 @app.route('/api/v1/user', methods=['POST'])
