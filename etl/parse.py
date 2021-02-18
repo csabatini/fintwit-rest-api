@@ -12,6 +12,7 @@ html_parser = HTMLParser()
 
 
 def parse_user(status, users):
+    print status
     u = {"author_id": status.user.id, "screen_name": '@'+status.user.screen_name, "name": status.user.name,
          "location": status.user.location, "description": status.user.description,
          "profile_img_url": status.user.profile_image_url_https.replace('_normal', '_400x400')}
