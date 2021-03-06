@@ -82,7 +82,7 @@ def parse_status(status):
         'text': parsed_txt,
         'quote_text': parsed_quote_txt,
         'media_urls': media_urls or [],
-        'symbols': set(symbols)
+        'symbols': list(set(symbols))
     }
 
     if status.user.screen_name == 'CNBC' and not re.findall("[0-9]+.[0-9]+%", parsed_txt):
