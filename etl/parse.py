@@ -53,15 +53,12 @@ def parse_status(status):
         if 'twitter.com' not in unquoted_url and not unquoted_url.endswith(('.pdf', '.jpg', '.mp4')):
             ext_url = unquoted_url
 
-    # parse stock symbols
-    symbols = list(re.findall("\$[A-Z]{2,}", parsed_txt))
     # get the media from the original tweet
     media_urls, parsed_txt = get_twitter_media_urls(status, parsed_txt)
     if ext_url and not media_urls:
         media_urls = get_ext_media_url(ext_url, media_urls)
 
     if status.quoted_status:
-        symbols += list(re.findall("\$[A-Z]{2,}", parsed_quote_txt))
         for u in status.quoted_status.urls:  # repeat url process with the retweeted/quoted url
             unquoted_url = requests.utils.unquote(u.expanded_url)
             parsed_quote_txt = parsed_quote_txt.replace(u.url, unquoted_url)
@@ -82,7 +79,6 @@ def parse_status(status):
         'text': parsed_txt,
         'quote_text': parsed_quote_txt,
         'media_urls': media_urls or [],
-        'symbols': list(set(symbols))
     }
 
     if status.user.screen_name == 'CNBC' and not re.findall("[0-9]+.[0-9]+%", parsed_txt):
