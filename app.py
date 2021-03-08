@@ -48,6 +48,8 @@ def status():
     results = Status.query.filter(Status.created_at <= filter_date)
     if request.args is not None and 'max_created_at' in request.args:
         guid = request.args['guid']
+        results = results.join(UserFavorite, Status.author_id == UserFavorite.author_id)
+                         .filter(UserFavorite.user_guid == guid)
 
     results = results.order_by(desc(Status.created_at)) \
         .limit(200 if not guid else 100) \
