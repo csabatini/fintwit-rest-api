@@ -118,9 +118,9 @@ def favorite():
 
     user = UserProfile.query.filter_by(guid=user_guid).first_or_404()
 
-    # for x in y: 
-    favorite = UserFavorite(user.guid, 'author_id', 'active')
-    db.session.add(favorite)
+    for fav in fav_list:
+        uf = UserFavorite(user.guid, fav.author_id, fav.active)
+        db.session.add(uf)
     db.session.commit()
 
 @app.before_request
