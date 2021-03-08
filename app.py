@@ -119,7 +119,7 @@ def favorite():
     user = UserProfile.query.filter_by(guid=user_guid).first_or_404()
 
     for fav in fav_list:
-        uf = UserFavorite(user.guid, fav.author_id, fav.active)
+        uf = UserFavorite(user.guid, fav['author_id'], fav['active'])
         db.session.add(uf)
     db.session.commit()
 
