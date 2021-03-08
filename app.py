@@ -42,12 +42,15 @@ def index():
 def status():
     g._kv['action'] = 'query'
     filter_date = datetime.utcnow()
+    guid = None
     if request.args is not None and 'max_created_at' in request.args:
         filter_date = datetime.fromtimestamp(long(request.args['max_created_at']) / 1000.0)
+    results = Status.query.filter(Status.created_at <= filter_date)
+    if request.args is not None and 'max_created_at' in request.args:
+        guid = request.args['guid']
 
-    results = Status.query.filter(Status.created_at <= filter_date) \
-        .order_by(desc(Status.created_at)) \
-        .limit(200) \
+    results = results.order_by(desc(Status.created_at)) \
+        .limit(200 if not guid else 100) \
         .all()
     g._kv['count'] = len(results)
     g._kv['userguid'] = dict(request.headers).get('Userguid', None)
