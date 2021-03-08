@@ -120,8 +120,10 @@ def favorite():
 
     for fav in fav_list:
         uf = UserFavorite(user.guid, fav['author_id'], fav['active'])
-        db.session.add(uf)
+        db.session.merge(uf)
     db.session.commit()
+
+    return jsonify({'success': True})
 
 @app.before_request
 def before_request():
