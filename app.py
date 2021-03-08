@@ -49,7 +49,8 @@ def status():
     if request.args is not None and 'guid' in request.args:
         guid = request.args['guid']
         results = results.join(UserFavorite, Status.author_id == UserFavorite.author_id) \
-                         .filter(UserFavorite.user_guid == guid)
+                         .filter(UserFavorite.user_guid == guid) \
+                         .filter(UserFavorite.active == 1)
 
     results = results.order_by(desc(Status.created_at)) \
         .limit(100 if guid else 200) \
