@@ -35,6 +35,8 @@ def parse_status(status):
         html_parser.unescape(status.retweeted_status.full_text if status.retweeted_status else status.full_text)
     parsed_quote_txt = \
         html_parser.unescape(status.quoted_status.full_text) if status.quoted_status else None
+    url = None if not status.urls else status.urls[0].expanded_url
+
     # if parsed_txt.count('\n') > MAX_NEWLINES:
     #     parsed_txt = parsed_txt.replace('\n', ' ')
     # if status.quoted_status and parsed_quote_txt.count('\n') > MAX_NEWLINES:
@@ -79,13 +81,14 @@ def parse_status(status):
         'text': parsed_txt,
         'quote_text': parsed_quote_txt,
         'media_urls': media_urls or [],
+        'url': url
     }
 
     if 'weekend' in parsed_txt and ('nice' in parsed_txt or 'great' in parsed_txt):
         return None
     elif status.user.screen_name == 'CNBC' and not re.findall("[0-9]+.[0-9]+%", parsed_txt):
         return None
-    elif status.user.screen_name == 'CNBCnow' and 'EARNINGS' not in parsed_txt and 'BREAKING' not in parsed_txt and '%' not in parsed_txt: # TODO
+    elif status.user.screen_name == 'CNBCnow' and ('BREAKING' not in parsed_txt or (not url or not media_urls)):
         return None
     elif status.user.screen_name == 'LiveSquawk' and (not re.findall("\$[A-Z]{2,}", parsed_txt) or not media_urls):
         return None
