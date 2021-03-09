@@ -1,13 +1,11 @@
 from datetime import datetime
-from HTMLParser import HTMLParser
-# from html.parser import HTMLParser
+import html
 from bs4 import BeautifulSoup
 import requests
 import re
 import json
 
 
-html_parser = HTMLParser()
 # MAX_NEWLINES = 11
 
 
@@ -32,9 +30,9 @@ def parse_status(status):
     unixtime = \
         int((datetime.strptime(status.created_at, '%a %b %d %H:%M:%S +0000 %Y') - datetime(1970, 1, 1)).total_seconds())
     parsed_txt = \
-        html_parser.unescape(status.retweeted_status.full_text if status.retweeted_status else status.full_text)
+        html.unescape(status.retweeted_status.full_text if status.retweeted_status else status.full_text)
     parsed_quote_txt = \
-        html_parser.unescape(status.quoted_status.full_text) if status.quoted_status else None
+        html.unescape(status.quoted_status.full_text) if status.quoted_status else None
     url = None if not status.urls else status.urls[0].expanded_url
 
     # if parsed_txt.count('\n') > MAX_NEWLINES:
