@@ -81,9 +81,11 @@ def parse_status(status):
         'media_urls': media_urls or [],
     }
 
-    if status.user.screen_name == 'CNBC' and not re.findall("[0-9]+.[0-9]+%", parsed_txt):
+    if 'weekend' in parsed_txt and ('nice' in parsed_txt or 'great' in parsed_txt):
         return None
-    elif status.user.screen_name == 'CNBCnow' and 'EARNINGS' not in parsed_txt and 'BREAKING' not in parsed_txt and '%' not in parsed_txt:
+    elif status.user.screen_name == 'CNBC' and not re.findall("[0-9]+.[0-9]+%", parsed_txt):
+        return None
+    elif status.user.screen_name == 'CNBCnow' and 'EARNINGS' not in parsed_txt and 'BREAKING' not in parsed_txt and '%' not in parsed_txt: # TODO
         return None
     elif status.user.screen_name == 'LiveSquawk' and (not re.findall("\$[A-Z]{2,}", parsed_txt) or not media_urls):
         return None
