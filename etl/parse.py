@@ -89,7 +89,7 @@ def parse_status(status):
         return None
     elif status.user.screen_name == 'LiveSquawk' and (not re.findall("\$[A-Z]{2,}", parsed_txt) or not media_urls):
         return None
-    elif status.user.screen_name == 'SquawkCNBC' and 'LISTEN' in parsed_txt):
+    elif status.user.screen_name == 'SquawkCNBC' and 'LISTEN' in parsed_txt:
         return None
     elif status.user.screen_name == 'OptionsAction' and not re.findall("\$[A-Z]{2,}", parsed_txt):
         return None
