@@ -1,6 +1,6 @@
 from flask import Flask, request, abort, jsonify, g
 from sqlalchemy import desc
-from ConfigParser import ConfigParser
+from configparser import ConfigParser
 from os.path import join, expanduser
 from datetime import datetime, timedelta
 from logging.config import dictConfig
