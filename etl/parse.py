@@ -57,6 +57,22 @@ def parse_status(status):
 
     # get the media from the original tweet
     media_urls, parsed_txt = get_twitter_media_urls(status, parsed_txt)
+    if 'weekend' in parsed_txt and ('nice' in parsed_txt or 'great' in parsed_txt):
+        return None
+    elif status.user.screen_name == 'CNBC' and not re.findall("[0-9]+.[0-9]+%", parsed_txt):
+        return None
+    elif status.user.screen_name == 'CNBCnow' and ('BREAKING' not in parsed_txt or (not url or not media_urls)):
+        return None
+    elif status.user.screen_name == 'LiveSquawk' and (not re.findall("\$[A-Z]{2,}", parsed_txt) or not media_urls):
+        return None
+    elif status.user.screen_name == 'SquawkCNBC' and 'LISTEN' in parsed_txt:
+        return None
+    elif status.user.screen_name == 'OptionsAction' and not re.findall("\$[A-Z]{2,}", parsed_txt):
+        return None
+    elif status.user.screen_name == 'CNBCClosingBell' and \
+        (not re.findall("\$[A-Z]{2,}", parsed_txt) and not 'S&P' in parsed_txt):
+        return None
+
     if ext_url and not media_urls:
         media_urls = get_ext_media_url(ext_url, media_urls)
 
@@ -83,24 +99,7 @@ def parse_status(status):
         'media_urls': media_urls or [],
         'url': url
     }
-
-    if 'weekend' in parsed_txt and ('nice' in parsed_txt or 'great' in parsed_txt):
-        return None
-    elif status.user.screen_name == 'CNBC' and not re.findall("[0-9]+.[0-9]+%", parsed_txt):
-        return None
-    elif status.user.screen_name == 'CNBCnow' and ('BREAKING' not in parsed_txt or (not url or not media_urls)):
-        return None
-    elif status.user.screen_name == 'LiveSquawk' and (not re.findall("\$[A-Z]{2,}", parsed_txt) or not media_urls):
-        return None
-    elif status.user.screen_name == 'SquawkCNBC' and 'LISTEN' in parsed_txt:
-        return None
-    elif status.user.screen_name == 'OptionsAction' and not re.findall("\$[A-Z]{2,}", parsed_txt):
-        return None
-    elif status.user.screen_name == 'CNBCClosingBell' and \
-        (not re.findall("\$[A-Z]{2,}", parsed_txt) and not 'S&P' in parsed_txt):
-        return None
-    else:
-        return tweet_dict
+    return tweet_dict
 
 def get_ext_media_url(ext_url, media_urls):
     urls = media_urls 
