@@ -41,6 +41,7 @@ def index():
 @app.route('/api/v1/status', methods=['GET'])
 def status():
     g._kv['action'] = 'query'
+    g._kv['userguid'] = None
     filter_date = datetime.utcnow()
     guid = None
     if request.args is not None and 'max_created_at' in request.args:
@@ -57,7 +58,6 @@ def status():
         .limit(50) \
         .all()
     g._kv['count'] = len(results)
-    g._kv['userguid'] = dict(request.headers).get('Userguid', None)
 
     return jsonify([r.as_dict() for r in results])
 
