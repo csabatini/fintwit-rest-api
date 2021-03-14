@@ -1,4 +1,4 @@
-rom flask import Flask, request, abort, jsonify, g
+from flask import Flask, request, abort, jsonify, g
 from sqlalchemy import desc
 from configparser import ConfigParser
 from os.path import join, expanduser
