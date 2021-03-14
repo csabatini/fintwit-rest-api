@@ -1,4 +1,4 @@
-from flask import Flask, request, abort, jsonify, g
+rom flask import Flask, request, abort, jsonify, g
 from sqlalchemy import desc
 from configparser import ConfigParser
 from os.path import join, expanduser
@@ -46,7 +46,7 @@ def status():
     guid = None
     if request.args is not None and 'max_created_at' in request.args:
         filter_date = datetime.fromtimestamp(int(request.args['max_created_at']) / 1000.0)
-    results = Status.query.filter(Status.created_at <= filter_date)
+    results = Status.query.filter(Status.created_at < filter_date)
     if request.args is not None and 'userguid' in request.args:
         userguid = request.args['userguid']
         g._kv['userguid'] = str(userguid)
