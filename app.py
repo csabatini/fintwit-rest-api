@@ -47,9 +47,10 @@ def status():
         filter_date = datetime.fromtimestamp(int(request.args['max_created_at']) / 1000.0)
     results = Status.query.filter(Status.created_at <= filter_date)
     if request.args is not None and 'userguid' in request.args:
-        guid = request.args['userguid']
+        userguid = request.args['userguid']
+        g._kv['userguid'] = str(userguid)
         results = results.join(UserFavorite, Status.author_id == UserFavorite.author_id) \
-                         .filter(UserFavorite.user_guid == guid) \
+                         .filter(UserFavorite.user_guid == userguid) \
                          .filter(UserFavorite.active == 1)
 
     results = results.order_by(desc(Status.created_at)) \
