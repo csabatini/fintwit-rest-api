@@ -53,7 +53,7 @@ def status():
                          .filter(UserFavorite.active == 1)
 
     results = results.order_by(desc(Status.created_at)) \
-        .limit(100 if guid else 200) \
+        .limit(50) \
         .all()
     g._kv['count'] = len(results)
     g._kv['userguid'] = dict(request.headers).get('Userguid', None)
