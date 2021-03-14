@@ -23,12 +23,11 @@ CREATE TABLE status_v2 (
      UNIQUE(status_id)
 );
 
--- trumptweets.db
+-- fintwit.db
 CREATE TABLE user_profile (
      guid TEXT NULL,
-     push_enabled INTEGER NOT NULL,
+     push_setting INTEGER NOT NULL,
      device_token TEXT NULL,
-     login_time INTEGER NULL,
      UNIQUE(guid)
 );
 --INSERT INTO user_profile (push_enabled) VALUES (1);
