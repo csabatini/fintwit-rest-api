@@ -66,7 +66,7 @@ def author():
     g._kv['action'] = 'query'
     author_id = None
     if request.args is not None and 'author_id' in request.args:
-        author_id = long(request.args['author_id'])
+        author_id = int(request.args['author_id'])
         result = Author.query.filter(Author.author_id == author_id).first_or_404()
         return jsonify(result.as_dict())
     else:
