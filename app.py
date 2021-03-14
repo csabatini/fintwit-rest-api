@@ -83,8 +83,14 @@ def user_profile():
         g._kv['action'] = 'login'
     else:
         user = \
-            UserProfile(payload['guid'], payload['push_enabled'], payload['device_token'])
+            UserProfile(payload['guid'], payload.get('push_enabled', False), payload.get('device_token', None))
         db.session.add(user)
+        db.session.commit()
+        default_fav_one = UserFavorite(user.guid, 20402945, 1)
+        default_fav_two = UserFavorite(user.guid, 26574283, 1)
+        db.session.merge(default_fav_one)
+        db.session.merge(default_fav_two)
+        db.session.commit()
         g._kv['action'] = 'register'
 
     token = payload.get('device_token', None)
