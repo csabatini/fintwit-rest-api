@@ -84,7 +84,7 @@ def user_profile():
         g._kv['action'] = 'login'
     else:
         user = \
-            UserProfile(payload['guid'], payload.get('push_enabled', False), payload.get('device_token', None))
+            UserProfile(payload['guid'], payload.get('push_setting', False), payload.get('device_token', None))
         db.session.add(user)
         db.session.commit()
         default_fav_one = UserFavorite(user.guid, 20402945, 1)
@@ -95,13 +95,13 @@ def user_profile():
         g._kv['action'] = 'register'
 
     token = payload.get('device_token', None)
-    push = payload.get('push_enabled', None)
+    push = payload.get('push_setting', None)
 
     if token and token != user.device_token:
         user.device_token = token
 
-    if push and push != user.push_enabled:
-        user.push_enabled = push
+    if push and push != user.push_setting:
+        user.push_setting = push
         g._kv['action'] = 'toggle_push'
         g._kv['value'] = push
     g._kv['userguid'] = str(user.guid)

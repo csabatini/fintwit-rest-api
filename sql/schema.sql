@@ -93,7 +93,7 @@ CREATE TABLE author (
 
 CREATE TABLE user_profile (
     guid varchar(36) NOT NULL,
-    push_enabled boolean NOT NULL,
+    push_setting int NOT NULL,
     device_token varchar(200) NULL,
     created_time timestamp DEFAULT CURRENT_TIMESTAMP,
     PRIMARY KEY (guid)

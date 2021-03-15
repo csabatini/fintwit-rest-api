@@ -14,13 +14,13 @@ class BaseModel(object):
 class UserProfile(db.Model, BaseModel):
     __tablename__ = 'user_profile'
     guid = db.Column(db.String(36), primary_key=True)
-    push_enabled = db.Column(db.Boolean)
+    push_setting = db.Column(db.Integer)
     device_token = db.Column(db.String(200))
     created_time = db.Column(db.DateTime)
 
-    def __init__(self, guid=None, push_enabled=None, device_token=None):
+    def __init__(self, guid=None, push_setting=None, device_token=None):
         self.guid = guid
-        self.push_enabled = push_enabled
+        self.push_setting = push_setting
         self.device_token = device_token
 
     def as_dict(self):
