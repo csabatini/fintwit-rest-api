@@ -93,14 +93,15 @@ def user_profile():
         db.session.merge(default_fav_two)
         db.session.commit()
         g._kv['action'] = 'register'
+
     g._kv['userguid'] = str(user.guid)
     token = payload.get('device_token', None)
     push = payload.get('push_setting', None)
     user.device_token = token
     user.push_setting = push
     db.session.merge(uf)
-
     db.session.commit()
+
     return jsonify(user.as_dict())
 
 @app.route('/api/v1/favorite', methods=['POST'])
