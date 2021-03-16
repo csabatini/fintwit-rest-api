@@ -79,12 +79,19 @@ def user_profile():
     if type(payload) is not dict or payload.get('guid', None) is None:
         abort(400)
 
-    user = UserProfile.query.filter_by(guid=payload['guid']).first()
+    guid = payload.get('guid', None)
+    token = payload.get('device_token', None)
+    push = payload.get('push_setting', None)
+    user = UserProfile.query.filter_by(guid=guid).first()
+    g._kv['userguid'] = guid
     if user:
         g._kv['action'] = 'login'
+        user.device_token = token
+        user.push_setting = push
+        db.session.merge(uf)
+        db.session.commit()
     else:
-        user = \
-            UserProfile(payload['guid'], payload.get('push_setting', False), payload.get('device_token', None))
+        user = UserProfile(guid, push, token)
         db.session.add(user)
         db.session.commit()
         default_fav_one = UserFavorite(user.guid, 20402945, 1)
@@ -93,14 +100,6 @@ def user_profile():
         db.session.merge(default_fav_two)
         db.session.commit()
         g._kv['action'] = 'register'
-
-    g._kv['userguid'] = str(user.guid)
-    token = payload.get('device_token', None)
-    push = payload.get('push_setting', None)
-    user.device_token = token
-    user.push_setting = push
-    db.session.merge(uf)
-    db.session.commit()
 
     return jsonify(user.as_dict())
 
