@@ -89,7 +89,7 @@ def user_profile():
         user.device_token = token
         user.push_setting = push
         user.login_time = datetime.utcnow()
-        db.session.merge(uf)
+        db.session.merge(user)
         db.session.commit()
     else:
         user = UserProfile(guid, push, token)
