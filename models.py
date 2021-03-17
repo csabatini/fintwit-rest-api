@@ -16,7 +16,7 @@ class UserProfile(db.Model, BaseModel):
     guid = db.Column(db.String(36), primary_key=True)
     push_setting = db.Column(db.Integer)
     device_token = db.Column(db.String(200))
-    created_time = db.Column(db.DateTime)
+    created_time = db.Column(db.DateTime, default=datetime.datetime.utcnow)
 
     def __init__(self, guid=None, push_setting=None, device_token=None):
         self.guid = guid
