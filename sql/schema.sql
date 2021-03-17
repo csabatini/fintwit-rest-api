@@ -96,6 +96,7 @@ CREATE TABLE user_profile (
     push_setting int NOT NULL,
     device_token varchar(200) NULL,
     created_time timestamp NOT NULL,
+    login_time timestamp NOT NULL,
     PRIMARY KEY (guid)
 ) DEFAULT CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci;
 

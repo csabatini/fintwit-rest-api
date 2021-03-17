@@ -88,6 +88,7 @@ def user_profile():
         g._kv['action'] = 'login'
         user.device_token = token
         user.push_setting = push
+        user.login_time = datetime.utcnow()
         db.session.merge(uf)
         db.session.commit()
     else:

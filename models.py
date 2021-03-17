@@ -17,6 +17,7 @@ class UserProfile(db.Model, BaseModel):
     push_setting = db.Column(db.Integer)
     device_token = db.Column(db.String(200))
     created_time = db.Column(db.DateTime, default=datetime.utcnow)
+    login_time = db.Column(db.DateTime, default=datetime.utcnow)
 
     def __init__(self, guid=None, push_setting=None, device_token=None):
         self.guid = guid
@@ -26,6 +27,7 @@ class UserProfile(db.Model, BaseModel):
     def as_dict(self):
         dict = BaseModel.as_dict(self)
         del dict['created_time']
+        del dict['login_time']
         return dict
 
 
