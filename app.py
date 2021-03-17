@@ -94,10 +94,14 @@ def user_profile():
         user = UserProfile(guid, push, token)
         db.session.add(user)
         db.session.commit()
-        default_fav_one = UserFavorite(user.guid, 20402945, 1)
-        default_fav_two = UserFavorite(user.guid, 26574283, 1)
+        default_fav_one = UserFavorite(user.guid, 20402945, 1) # CNBC
+        default_fav_two = UserFavorite(user.guid, 26574283, 1) # CNBCnow
+        default_fav_three = UserFavorite(user.guid, 404422077, 1) # SquawkCNBC
+        default_fav_four = UserFavorite(user.guid, 16451932, 1) # MadMoneyOnCNBC
         db.session.merge(default_fav_one)
         db.session.merge(default_fav_two)
+        db.session.merge(default_fav_three)
+        db.session.merge(default_fav_four)
         db.session.commit()
         g._kv['action'] = 'register'
 
