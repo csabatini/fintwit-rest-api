@@ -61,11 +61,11 @@ def parse_status(status):
         return None
     elif status.user.screen_name == 'CNBCnow' and ('BREAKING' not in parsed_txt or (not url or not media_urls)):
         return None
-    elif status.user.screen_name == 'LiveSquawk' and (not re.findall("\$[A-Z]{2,}", parsed_txt) or not media_urls):
+    elif status.user.screen_name == 'LiveSquawk' and (not re.findall("\$[A-Z]{1,}", parsed_txt) or not media_urls):
         return None
     elif status.user.screen_name == 'SquawkCNBC' and 'LISTEN' in parsed_txt:
         return None
-    elif status.user.screen_name == 'OptionsAction' and not re.findall("\$[A-Z]{2,}", parsed_txt):
+    elif status.user.screen_name == 'OptionsAction' and not re.findall("\$[A-Z]{1,}", parsed_txt):
         return None
 
     if ext_url and not media_urls:
