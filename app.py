@@ -145,7 +145,7 @@ def favorite():
 @auth.login_required
 def load():
     payload = request.get_json()
-    db = MySQLdb.connect(read_default_file='~/.my.cnf', db='fintwit', use_unicode=True, charset="utf8")
+    db = MySQLdb.connect(read_default_file='/home/webapp/.my.cnf', db='fintwit', use_unicode=True, charset="utf8")
     cursor = db.cursor()
     cursor.execute("SET NAMES utf8mb4")
     cursor.execute("SET CHARACTER SET utf8mb4")
