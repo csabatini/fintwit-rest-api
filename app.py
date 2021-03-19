@@ -7,6 +7,7 @@ from os.path import join, expanduser
 from datetime import datetime, timedelta
 from logging.config import dictConfig
 from config import LOG_CONFIG
+import MySQLdb
 import json
 import logging
 import time
