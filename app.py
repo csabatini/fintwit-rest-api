@@ -24,7 +24,7 @@ def setup_app(application):
     cnf_parser.read(cnf)
     username = cnf_parser.get('client', 'user')
     password = cnf_parser.get('client', 'password')
-    users[username] = generate_password_hash(password),
+    users[username] = generate_password_hash(password)
     application.config['SQLALCHEMY_DATABASE_URI'] = \
         'mysql+mysqldb://%s:%s@localhost/fintwit?charset=utf8mb4' % (username, password)
     application.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = 'False'
