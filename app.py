@@ -1,4 +1,6 @@
 from flask import Flask, request, abort, jsonify, g
+from flask_httpauth import HTTPBasicAuth
+from werkzeug.security import generate_password_hash, check_password_hash
 from sqlalchemy import desc
 from configparser import ConfigParser
 from os.path import join, expanduser
@@ -13,7 +15,8 @@ import uuid
 from models import db, Author, Status, UserProfile, UserFavorite
 
 app = Flask(__name__)
-
+auth = HTTPBasicAuth()
+users = {}
 
 def setup_app(application):
     cnf = join(expanduser('~'), '.my.cnf')
@@ -21,6 +24,7 @@ def setup_app(application):
     cnf_parser.read(cnf)
     username = cnf_parser.get('client', 'user')
     password = cnf_parser.get('client', 'password')
+    users[username] = generate_password_hash(password),
     application.config['SQLALCHEMY_DATABASE_URI'] = \
         'mysql+mysqldb://%s:%s@localhost/fintwit?charset=utf8mb4' % (username, password)
     application.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = 'False'
@@ -32,6 +36,11 @@ def setup_app(application):
 
 setup_app(app)
 
+@auth.verify_password
+def verify_password(username, password):
+    if username in users:
+        return check_password_hash(users.get(username), password)
+    return False
 
 @app.route("/", methods=['GET'])
 def index():
@@ -130,6 +139,13 @@ def favorite():
     db.session.commit()
 
     return jsonify({'success': True})
+
+@auth.login_required
+@app.route('/api/v1/load', methods=['GET'])
+def user_profile():
+    #payload = request.get_json()
+    return "Hello, {}!".format(auth.current_user())
+
 
 @app.before_request
 def before_request():
