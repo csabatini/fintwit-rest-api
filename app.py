@@ -166,7 +166,7 @@ def load():
     db.commit()
     cursor.close()
     db.close()
-    return "Hello, {}!".format(auth.current_user())
+    return jsonify({'success': True})
 
 
 @app.before_request
