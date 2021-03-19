@@ -122,7 +122,7 @@ def get_ext_media_url(ext_url, media_urls):
     for meta in soup.findAll("meta"):
         metaname = meta.get('name', '').lower()
         metaprop = meta.get('property', '').lower()
-        if 'og:image' == metaname or metaprop.find("og:image")>0:
+        if 'og:image' == metaname or 'og:image' == metaprop:
             og_image = meta['content'].strip()
 
     if twitter_player:
