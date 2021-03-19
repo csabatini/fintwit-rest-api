@@ -158,12 +158,12 @@ def load():
                        "ON DUPLICATE KEY UPDATE screen_name=values(screen_name), name=values(name), profile_img_url=values(profile_img_url), location=values(location), description=values(description)",
                        (v['author_id'], v['screen_name'], v['name'], v['profile_img_url'], v['location'], v['description']))
     db.commit()
-    # for s in status_kv_pairs:
-    #     cursor.execute("INSERT IGNORE INTO status (status_id, author_id, created_at, text, quote_author_id, quote_text) SELECT %s, %s, %s, %s, %s, %s",
-    #                   (s['id'], s['author_id'], s['timestamp'], s['text'], s['quote_author_id'], s['quote_text']))
-    #     for url in s['media_urls']:
-    #         cursor.execute("INSERT IGNORE INTO status_media (status_id, media_url) SELECT %s, %s", (s['id'], url))
-    # db.commit()
+    for s in statuses:
+        cursor.execute("INSERT IGNORE INTO status (status_id, author_id, created_at, text, quote_author_id, quote_text) SELECT %s, %s, %s, %s, %s, %s",
+                      (s['id'], s['author_id'], s['timestamp'], s['text'], s['quote_author_id'], s['quote_text']))
+        for url in s['media_urls']:
+            cursor.execute("INSERT IGNORE INTO status_media (status_id, media_url) SELECT %s, %s", (s['id'], url))
+    db.commit()
     cursor.close()
     db.close()
     return "Hello, {}!".format(auth.current_user())
