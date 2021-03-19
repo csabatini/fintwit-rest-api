@@ -55,7 +55,7 @@ def status():
                          .filter(UserFavorite.active == 1)
 
     results = results.order_by(desc(Status.created_at)) \
-        .limit(50) \
+        .limit(75) \
         .all()
     g._kv['count'] = len(results)
 
