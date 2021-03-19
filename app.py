@@ -140,8 +140,8 @@ def favorite():
 
     return jsonify({'success': True})
 
-@auth.login_required
 @app.route('/api/v1/load', methods=['GET'])
+@auth.login_required
 def load():
     #payload = request.get_json()
     return "Hello, {}!".format(auth.current_user())
