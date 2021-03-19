@@ -142,7 +142,7 @@ def favorite():
 
 @auth.login_required
 @app.route('/api/v1/load', methods=['GET'])
-def user_profile():
+def load():
     #payload = request.get_json()
     return "Hello, {}!".format(auth.current_user())
 
