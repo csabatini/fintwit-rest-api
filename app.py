@@ -187,7 +187,6 @@ def after_request(response):
         'status': response.status,
         'user_agent': dict(request.headers).get('User-Agent', None)
     })
-    response.headers['epoch_ts'] = int(time.time()*1000.0)
     app.logger.info(json.dumps(g._kv))
     return response
 
