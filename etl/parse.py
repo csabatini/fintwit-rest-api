@@ -151,4 +151,4 @@ def get_twitter_media_urls(stat, txt):
                 url = None if len(variants) == 0 else variants[0]['url'] if len(variants) == 1 else variants[1]['url']
                 return [url], txt
             urls.append(url)
-    return urls, txt
+    return (None, txt) if not urls or 'pscp.tv' in urls[0] else (url, txt)
