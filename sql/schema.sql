@@ -116,7 +116,8 @@ CREATE TABLE status (
     text varchar(1000) NOT NULL,
     quote_author_id bigint NULL,
     quote_text varchar(1000) NULL,
-    PRIMARY KEY (status_id),
+    PRIMARY KEY (created_at DESC, author_id),
+    UNIQUE KEY (status_id),
     FOREIGN KEY (author_id) REFERENCES author(author_id)
 ) DEFAULT CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci;
 
