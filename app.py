@@ -57,6 +57,8 @@ def status():
     if request.args is not None and 'max_created_at' in request.args:
         filter_date = datetime.fromtimestamp(int(request.args['max_created_at']) / 1000.0)
     results = Status.query.filter(Status.created_at < filter_date)
+    if request.args is not None and 'author_id' in request.args:
+        results = results.filter(Status.author_id == int(requests.args['author_id']))
     if request.args is not None and 'userguid' in request.args:
         userguid = request.args['userguid']
         g._kv['userguid'] = str(userguid)
