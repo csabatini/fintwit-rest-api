@@ -146,10 +146,10 @@ def favorite():
 @app.route('/api/v1/load', methods=['POST'])
 @auth.login_required
 def load():
-    users = request.get_json().get('users', None)
-    statuses = request.get_json().get('statuses', None)
+    users = request.get_json().get('users', [])
+    statuses = request.get_json().get('statuses', [])
     if not users or not statuses:
-        abort(400)
+        return jsonify({'success': True, 'count': len(statuses)})
     db = MySQLdb.connect(read_default_file='/home/webapp/.my.cnf', db='fintwit', use_unicode=True, charset="utf8")
     cursor = db.cursor()
     cursor.execute("SET NAMES utf8mb4")
@@ -168,7 +168,7 @@ def load():
     db.commit()
     cursor.close()
     db.close()
-    return jsonify({'success': True})
+    return jsonify({'success': True, 'count': len(statuses)})
 
 
 @app.before_request
