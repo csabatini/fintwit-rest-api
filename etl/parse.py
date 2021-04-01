@@ -73,7 +73,10 @@ def parse_status(status):
         return None
 
     if ext_url and not media_urls:
-        media_urls = get_ext_media_url(ext_url, media_urls)
+        try:
+            media_urls = get_ext_media_url(ext_url, media_urls)
+        except Exception as e:
+            pass
 
     if status.quoted_status:
         for u in status.quoted_status.urls:  # repeat url process with the retweeted/quoted url
@@ -85,7 +88,10 @@ def parse_status(status):
         if tmp_media and not media_urls:
             media_urls = tmp_media
         if ext_url and not media_urls:
-            media_urls = get_ext_media_url(ext_url, media_urls)
+            try:
+                media_urls = get_ext_media_url(ext_url, media_urls)
+            except Exception as e:
+                pass
 
     tweet_dict = {
         'id': status_id,
