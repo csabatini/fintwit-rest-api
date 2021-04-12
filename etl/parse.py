@@ -57,7 +57,7 @@ def parse_status(status):
     media_urls, parsed_txt = get_twitter_media_urls(status, parsed_txt)
     if 'weekend' in parsed_txt and ('nice' in parsed_txt or 'great' in parsed_txt):
         return None
-    elif status.user.screen_name == 'CNBC' and not re.findall("[0-9]+\.[0-9]+%", parsed_txt):
+    elif status.user.screen_name == 'CNBC' and (not re.findall("[0-9]+\.[0-9]+%", parsed_txt) and 'premarket' not in parsed_txt):
         return None
     elif status.user.screen_name == 'CNBCnow' and ('BREAKING' not in parsed_txt and (not url or not media_urls)):
         return None
