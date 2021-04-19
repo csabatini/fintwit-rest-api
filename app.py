@@ -15,7 +15,7 @@ import uuid
 
 from models import db, Author, Status, UserProfile, UserFavorite
 
-app = Flask(__name__)
+app = Flask(__name__, static_url_path='')
 auth = HTTPBasicAuth()
 users = {}
 
@@ -47,6 +47,9 @@ def verify_password(username, password):
 def index():
     return "Fintwit Web Service"
 
+@app.route('/app-ads.txt')
+def ads_txt():
+    return app.send_static_file('app-ads.txt')
 
 @app.route('/api/v1/status', methods=['GET'])
 def status():
@@ -152,7 +155,7 @@ def load():
     statuses = request.get_json().get('statuses', [])
     if not users or not statuses:
         return jsonify({'success': True, 'count': len(statuses)})
-    db = MySQLdb.connect(read_default_file='/home/webapp/.my.cnf', db='fintwit', use_unicode=True, charset="utf8")
+    db = MySQLdb.connect(read_default_file='/home/csabatini/.my.cnf', db='fintwit', use_unicode=True, charset="utf8")
     cursor = db.cursor()
     cursor.execute("SET NAMES utf8mb4")
     cursor.execute("SET CHARACTER SET utf8mb4")
