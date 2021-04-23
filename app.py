@@ -115,11 +115,13 @@ def user_profile():
         default_fav_three = UserFavorite(user.guid, 36992781, 1) # CNBCPro
         default_fav_four = UserFavorite(user.guid, 1278852289, 1) # TradingNation
         default_fav_five = UserFavorite(user.guid, 16451932, 1) # MadMoneyOnCNBC
+        default_fav_six = UserFavorite(user.guid, 69620713, 1) # BloombergMarkets
         db.session.merge(default_fav_one)
         db.session.merge(default_fav_two)
         db.session.merge(default_fav_three)
         db.session.merge(default_fav_four)
         db.session.merge(default_fav_five)
+        db.session.merge(default_fav_six)
         db.session.commit()
         g._kv['action'] = 'register'
 
