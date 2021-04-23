@@ -146,6 +146,16 @@ CREATE TABLE status_media (
     FOREIGN KEY (status_id) REFERENCES status(status_id)
 ) DEFAULT CHARACTER SET = utf8 COLLATE = utf8_general_ci;
 
+
+CREATE TABLE default_favorite (
+    author_id bigint NOT NULL,
+    FOREIGN KEY (author_id) REFERENCES author(author_id)
+) DEFAULT CHARACTER SET = utf8 COLLATE = utf8_general_ci;
+
+INSERT INTO default_favorite (author_id) VALUES (36992781);
+INSERT INTO default_favorite (author_id) VALUES (16451932);
+INSERT INTO default_favorite (author_id) VALUES (69620713);
+
 -- remove
 CREATE TABLE tag_alias (
     tag_alias_id int NOT NULL AUTO_INCREMENT,
