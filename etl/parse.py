@@ -111,6 +111,9 @@ def parse_status(status):
 
 def get_ext_media_url(ext_url, media_urls):
     urls = media_urls 
+    if '.mp4' in ext_url or '.mov' in ext_url:
+        return urls
+
     headers = {
         'user-agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/56.0.2924.87 Safari/537.36',
         'referrer': 'https://google.com',
