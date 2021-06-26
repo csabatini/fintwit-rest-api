@@ -66,7 +66,7 @@ def parse_status(status):
         return None
     elif status.user.screen_name == 'markets' and not media_urls:
         return None
-    elif status.user.screen_name == 'MarketBeatCom' and ('Buys' in parsed_txt or 'Sells' in parsed_txt):
+    elif status.user.screen_name == 'crypto' and not media_urls:
         return None
     elif status.user.screen_name == 'LiveSquawk' and (not re.findall("\$[A-Z]{1,}", parsed_txt) and not media_urls):
         return None
