@@ -10,8 +10,6 @@ from config import LOG_CONFIG
 import MySQLdb
 import json
 import logging
-import time
-import uuid
 
 from models import db, Author, Status, UserProfile, UserFavorite
 

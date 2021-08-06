@@ -5,10 +5,6 @@ import requests
 import re
 import json
 
-
-# MAX_NEWLINES = 11
-
-
 def parse_user(status, users):
     u = {"author_id": status.user.id, "screen_name": '@'+status.user.screen_name, "name": status.user.name,
          "location": status.user.location, "description": status.user.description,
@@ -34,11 +30,6 @@ def parse_status(status):
     parsed_quote_txt = \
         html.unescape(status.quoted_status.full_text) if status.quoted_status else None
     url = None if not status.urls else status.urls[0].expanded_url
-
-    # if parsed_txt.count('\n') > MAX_NEWLINES:
-    #     parsed_txt = parsed_txt.replace('\n', ' ')
-    # if status.quoted_status and parsed_quote_txt.count('\n') > MAX_NEWLINES:
-    #     parsed_quote_txt = parsed_quote_txt.replace('\n', ' ')
 
     ext_url = None
     if status.quoted_status:
