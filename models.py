@@ -84,18 +84,6 @@ class UserFavorite(db.Model, BaseModel):
         self.author_id = author_id
         self.active = active
 
-# class StatusTag(db.Model, BaseModel):
-#     __tablename__ = 'status_tag_v2'
-#     status_tag_v2_id = db.Column(db.Integer, primary_key=True)
-#     status_id = db.Column(db.String(36), ForeignKey(Status.status_id))
-#     tag_id = db.Column(db.Integer, ForeignKey(Tag.tag_id))
-
-#     tag = db.relationship('Tag', foreign_keys='StatusTag.tag_id', lazy='joined')
-
-#     def as_dict(self):
-#         return self.tag.as_dict()
-
-
 def get_unixtime(timestamp):
     epoch = datetime.utcfromtimestamp(0)
     return int((timestamp - epoch).total_seconds() * 1000.0)

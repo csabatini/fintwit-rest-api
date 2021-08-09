@@ -178,8 +178,6 @@ def load():
 
 @app.before_request
 def before_request():
-    # TODO: fix the hardcoding of this
-    # g._kv = dict(app_id=os.environ.get('APP_ID', None))
     g._kv = dict(app_id='fintwit')
     return None
 
