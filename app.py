@@ -6,7 +6,7 @@ from configparser import ConfigParser
 from os.path import join, expanduser
 from datetime import datetime, timedelta
 from logging.config import dictConfig
-from config import LOG_CONFIG
+from config import DEFAULT_IDS, LOG_CONFIG
 import MySQLdb
 import json
 import logging
@@ -108,18 +108,9 @@ def user_profile():
         user = UserProfile(guid, push, token)
         db.session.add(user)
         db.session.commit()
-        default_fav_one = UserFavorite(user.guid, 20402945, 1) # CNBC
-        default_fav_two = UserFavorite(user.guid, 26574283, 1) # CNBCnow
-        default_fav_three = UserFavorite(user.guid, 36992781, 1) # CNBCPro
-        default_fav_four = UserFavorite(user.guid, 1278852289, 1) # TradingNation
-        default_fav_five = UserFavorite(user.guid, 16451932, 1) # MadMoneyOnCNBC
-        default_fav_six = UserFavorite(user.guid, 69620713, 1) # BloombergMarkets
-        db.session.merge(default_fav_one)
-        db.session.merge(default_fav_two)
-        db.session.merge(default_fav_three)
-        db.session.merge(default_fav_four)
-        db.session.merge(default_fav_five)
-        db.session.merge(default_fav_six)
+        for id in DEFAULT_IDS:
+            uf = UserFavorite(user.guid, id, 1)
+            db.session.merge(uf)
         db.session.commit()
         g._kv['action'] = 'register'
 
@@ -147,34 +138,6 @@ def favorite():
     db.session.commit()
 
     return jsonify({'success': True})
-
-@app.route('/api/v1/load', methods=['POST'])
-@auth.login_required
-def load():
-    users = request.get_json().get('users', [])
-    statuses = request.get_json().get('statuses', [])
-    if not users or not statuses:
-        return jsonify({'success': True, 'count': len(statuses)})
-    db = MySQLdb.connect(read_default_file='/home/webapp/.my.cnf', db='fintwit', use_unicode=True, charset="utf8")
-    cursor = db.cursor()
-    cursor.execute("SET NAMES utf8mb4")
-    cursor.execute("SET CHARACTER SET utf8mb4")
-    cursor.execute("SET character_set_connection=utf8mb4")
-    for k, v in users.items():
-        cursor.execute("INSERT INTO author (author_id, screen_name, name, profile_img_url, location, description) VALUES (%s, %s, %s, %s, %s, %s) "
-                       "ON DUPLICATE KEY UPDATE screen_name=values(screen_name), name=values(name), profile_img_url=values(profile_img_url), location=values(location), description=values(description)",
-                       (v['author_id'], v['screen_name'], v['name'], v['profile_img_url'], v['location'], v['description']))
-    db.commit()
-    for s in statuses:
-        cursor.execute("INSERT IGNORE INTO status (status_id, author_id, created_at, text, quote_author_id, quote_text) SELECT %s, %s, %s, %s, %s, %s",
-                      (s['id'], s['author_id'], s['timestamp'], s['text'], s['quote_author_id'], s['quote_text']))
-        for url in s['media_urls']:
-            cursor.execute("INSERT IGNORE INTO status_media (status_id, media_url) SELECT %s, %s", (s['id'], url))
-    db.commit()
-    cursor.close()
-    db.close()
-    return jsonify({'success': True, 'count': len(statuses)})
-
 
 @app.before_request
 def before_request():

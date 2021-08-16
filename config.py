@@ -21,3 +21,12 @@ LOG_CONFIG = {
         }
     }
 }
+
+DEFAULT_IDS = [
+    20402945, # CNBC
+    26574283, # CNBCnow
+    36992781, # CNBCPro
+    1278852289, # TradingNation
+    16451932, # MadMoneyOnCNBC
+    69620713 # BloombergMarkets
+]
